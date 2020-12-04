@@ -12,8 +12,8 @@
     <description>LiuYun Cloud</description>
 
     <modules>
-
         <module>liuyun-common</module>
+        <module>liuyun-gateway</module>
         <module>liuyun-auth</module>
     </modules>
 
@@ -61,12 +61,6 @@
                 <version>${spring-boot.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
-            </dependency>
-
-            <dependency>
-                <groupId>com.liuyun.common</groupId>
-                <artifactId>liuyun-common</artifactId>
-                <version>${version}</version>
             </dependency>
 
             <!-- spring-boot-admin -->

@@ -1,0 +1,9 @@
+# 应用名称
+server:
+  port: 18080
+
+spring:
+  profiles:
+    active: dev
+  application:
+    name: liuyun-gateway

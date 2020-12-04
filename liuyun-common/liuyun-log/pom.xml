@@ -5,25 +5,17 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>com.liuyun</groupId>
-        <artifactId>liuyun</artifactId>
+        <groupId>com.liuyun.common</groupId>
+        <artifactId>liuyun-common</artifactId>
         <version>1.0.0</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <groupId>com.liuyun.common</groupId>
-    <artifactId>liuyun-common</artifactId>
-    <packaging>pom</packaging>
+    <groupId>com.liuyun.log</groupId>
+    <artifactId>liuyun-log</artifactId>
     <version>${version}</version>
-    <name>LiuYun-Common</name>
-    <description>LiuYun Common</description>
-
-    <modules>
-        <module>liuyun-core</module>
-        <module>liuyun-utils</module>
-        <module>liuyun-log</module>
-        <module>liuyun-model</module>
-    </modules>
+    <name>LiuYun-Log</name>
+    <description>LiuYun Log</description>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -33,4 +25,5 @@
     <dependencies>
 
     </dependencies>
+
 </project>

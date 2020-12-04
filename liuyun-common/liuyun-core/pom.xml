@@ -5,25 +5,17 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>com.liuyun</groupId>
-        <artifactId>liuyun</artifactId>
+        <groupId>com.liuyun.common</groupId>
+        <artifactId>liuyun-common</artifactId>
         <version>1.0.0</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <groupId>com.liuyun.common</groupId>
-    <artifactId>liuyun-common</artifactId>
-    <packaging>pom</packaging>
+    <groupId>com.liuyun.core</groupId>
+    <artifactId>liuyun-core</artifactId>
     <version>${version}</version>
-    <name>LiuYun-Common</name>
-    <description>LiuYun Common</description>
-
-    <modules>
-        <module>liuyun-core</module>
-        <module>liuyun-utils</module>
-        <module>liuyun-log</module>
-        <module>liuyun-model</module>
-    </modules>
+    <name>LiuYun-Core</name>
+    <description>LiuYun Core</description>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -31,6 +23,15 @@
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
 
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
     </dependencies>
+
 </project>
