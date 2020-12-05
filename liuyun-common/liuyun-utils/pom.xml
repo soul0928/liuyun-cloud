@@ -13,7 +13,8 @@
 
     <groupId>com.liuyun.utils</groupId>
     <artifactId>liuyun-utils</artifactId>
-    <version>${version}</version>
+    <version>1.0.0</version>
+    <packaging>jar</packaging>
     <name>LiuYun-Utils</name>
     <description>LiuYun Utils</description>
 
@@ -26,6 +27,7 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+            <scope>provided</scope>
         </dependency>
 
         <dependency>
@@ -38,5 +40,4 @@
             <artifactId>hutool-all</artifactId>
         </dependency>
     </dependencies>
-
 </project>

@@ -14,23 +14,19 @@
     <groupId>com.liuyun.common</groupId>
     <artifactId>liuyun-common</artifactId>
     <packaging>pom</packaging>
-    <version>${version}</version>
+    <version>1.0.0</version>
     <name>LiuYun-Common</name>
     <description>LiuYun Common</description>
 
     <modules>
-        <module>liuyun-core</module>
         <module>liuyun-utils</module>
-        <module>liuyun-log</module>
         <module>liuyun-model</module>
+        <module>liuyun-log</module>
+        <module>liuyun-core</module>
     </modules>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>11</maven.compiler.source>
     </properties>
-
-    <dependencies>
-
-    </dependencies>
 </project>

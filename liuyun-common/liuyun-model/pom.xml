@@ -13,7 +13,8 @@
 
     <groupId>com.liuyun.model</groupId>
     <artifactId>liuyun-model</artifactId>
-    <version>${version}</version>
+    <version>1.0.0</version>
+    <packaging>jar</packaging>
     <name>LiuYun-Model</name>
     <description>LiuYun Model</description>
 
@@ -24,9 +25,8 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
+            <groupId>com.liuyun.utils</groupId>
+            <artifactId>liuyun-utils</artifactId>
         </dependency>
     </dependencies>
-
 </project>

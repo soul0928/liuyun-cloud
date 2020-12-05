@@ -12,7 +12,7 @@
 
     <groupId>com.liuyun.gateway</groupId>
     <artifactId>liuyun-gateway</artifactId>
-    <version>${version}</version>
+    <version>1.0.0</version>
     <name>LiuYun-Gateway</name>
     <description>LiuYun Gateway</description>
 
@@ -23,9 +23,15 @@
     </properties>
 
     <dependencies>
+
         <dependency>
-            <groupId>com.liuyun.common</groupId>
-            <artifactId>liuyun-common</artifactId>
+            <groupId>com.liuyun.utils</groupId>
+            <artifactId>liuyun-utils</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.liuyun.log</groupId>
+            <artifactId>liuyun-log</artifactId>
         </dependency>
 
         <dependency>
@@ -56,7 +62,6 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <version>2.3.4.RELEASE</version>
                 <configuration>
                     <mainClass>com.liuyun.gateway.LiuYunGatewayApplication</mainClass>
                 </configuration>

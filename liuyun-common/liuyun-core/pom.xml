@@ -13,7 +13,8 @@
 
     <groupId>com.liuyun.core</groupId>
     <artifactId>liuyun-core</artifactId>
-    <version>${version}</version>
+    <version>1.0.0</version>
+    <packaging>jar</packaging>
     <name>LiuYun-Core</name>
     <description>LiuYun Core</description>
 
@@ -26,12 +27,22 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+            <scope>provided</scope>
         </dependency>
 
         <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
+            <groupId>com.liuyun.utils</groupId>
+            <artifactId>liuyun-utils</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.liuyun.model</groupId>
+            <artifactId>liuyun-model</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.liuyun.log</groupId>
+            <artifactId>liuyun-log</artifactId>
         </dependency>
     </dependencies>
-
 </project>
