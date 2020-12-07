@@ -11,12 +11,12 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <groupId>com.liuyun.model</groupId>
-    <artifactId>liuyun-model</artifactId>
+    <groupId>com.liuyun.oauth2</groupId>
+    <artifactId>liuyun-auth-client</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>jar</packaging>
-    <name>LiuYun-Model</name>
-    <description>LiuYun Model</description>
+    <name>LiuYun-Auth-Client</name>
+    <description>LiuYun Auth-Client</description>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -25,20 +25,19 @@
 
     <dependencies>
         <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-oauth2</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>com.liuyun.utils</groupId>
             <artifactId>liuyun-utils</artifactId>
         </dependency>
-
-        <dependency>
-            <groupId>com.liuyun.core</groupId>
-            <artifactId>liuyun-core</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.liuyun.swagger2</groupId>
-            <artifactId>liuyun-swagger2</artifactId>
-        </dependency>
-
-
     </dependencies>
 </project>

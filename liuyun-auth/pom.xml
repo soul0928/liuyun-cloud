@@ -23,9 +23,25 @@
     </properties>
 
     <dependencies>
+
         <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-oauth2</artifactId>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.liuyun.log</groupId>
+            <artifactId>liuyun-log</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.liuyun.core</groupId>
+            <artifactId>liuyun-core</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.liuyun.oauth2</groupId>
+            <artifactId>liuyun-auth-client</artifactId>
         </dependency>
 
         <dependency>

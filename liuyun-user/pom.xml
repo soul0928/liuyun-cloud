@@ -10,11 +10,11 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <groupId>com.liuyun.gateway</groupId>
-    <artifactId>liuyun-gateway</artifactId>
+    <groupId>com.liuyun.user</groupId>
+    <artifactId>liuyun-user</artifactId>
     <version>1.0.0</version>
-    <name>LiuYun-Gateway</name>
-    <description>LiuYun Gateway</description>
+    <name>LiuYun-User</name>
+    <description>LiuYun User</description>
 
     <properties>
         <java.version>11</java.version>
@@ -35,8 +35,8 @@
         </dependency>
 
         <dependency>
-            <groupId>com.liuyun.core</groupId>
-            <artifactId>liuyun-core</artifactId>
+            <groupId>com.liuyun.model</groupId>
+            <artifactId>liuyun-model</artifactId>
         </dependency>
 
         <dependency>
@@ -68,7 +68,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>com.liuyun.gateway.LiuYunGatewayApplication</mainClass>
+                    <mainClass>com.liuyun.auth.LiuYunAuthApplication</mainClass>
                 </configuration>
                 <executions>
                     <execution>

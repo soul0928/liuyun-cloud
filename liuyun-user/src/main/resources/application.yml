@@ -1,12 +1,12 @@
 # 应用名称
 server:
-  port: 19080
+  port: 19010
 
 spring:
   profiles:
     active: dev
   application:
-    name: liuyun-auth
+    name: liuyun-user
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
     driver-class-name: com.mysql.cj.jdbc.Driver

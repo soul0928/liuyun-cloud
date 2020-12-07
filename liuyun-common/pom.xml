@@ -14,7 +14,7 @@
     <groupId>com.liuyun.common</groupId>
     <artifactId>liuyun-common</artifactId>
     <packaging>pom</packaging>
-    <version>1.0.0</version>
+    <version>1.0.0-SNAPSHOT</version>
     <name>LiuYun-Common</name>
     <description>LiuYun Common</description>
 
@@ -23,6 +23,8 @@
         <module>liuyun-model</module>
         <module>liuyun-log</module>
         <module>liuyun-core</module>
+        <module>liuyun-swagger2</module>
+        <module>liuyun-auth-client</module>
     </modules>
 
     <properties>
