@@ -23,12 +23,14 @@
         <module>liuyun-model</module>
         <module>liuyun-log</module>
         <module>liuyun-core</module>
+        <module>liuyun-redis</module>
         <module>liuyun-swagger2</module>
+        <module>liuyun-api</module>
         <module>liuyun-auth-client</module>
     </modules>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.source>1.8</maven.compiler.source>
     </properties>
 </project>

@@ -26,7 +26,7 @@ public class SysUserEntity extends IBaseEntity<SysUserEntity> {
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(value = "账号")
-    private String account;
+    private String username;
 
     @ApiModelProperty(value = "密码")
     private String password;

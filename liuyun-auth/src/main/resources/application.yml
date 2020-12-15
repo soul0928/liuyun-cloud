@@ -7,6 +7,26 @@ spring:
     active: dev
   application:
     name: liuyun-auth
+  cloud:
+    nacos:
+      discovery:
+        group: liuyun
+        server-addr: 123.57.73.216:8848
+        namespace: 30dd5d56-8bec-48eb-94dc-5851cc2e16cd
+        service: ${spring.application.name}
+        weight: 1
+  redis:
+    host: 123.57.73.216
+    port: 6379
+    database: 0
+    password:
+    timeout: 10000
+    lettuce:
+      pool:
+        min-idle: 0
+        max-wait: -1
+        max-active: 8
+        max-idle: 8
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -66,3 +86,19 @@ mybatis-plus:
       logic-delete-value: 1 # 逻辑已删除值(默认为 1)
       logic-not-delete-value: 0 # 逻辑未删除值(默认为 0)
       id-type: assign_id
+
+liuyun:
+  security:
+    ignore:
+      httpUrls:
+        - /aa/bb
+        - /bb/aa
+      menusPaths:
+        - /aa/bb
+        - /bb/aa
+
+encrypt:
+  key-store:
+    location: classpath:liuyun.jks
+    secret: liuyun
+    alias: liuyun
