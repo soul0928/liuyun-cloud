@@ -8,7 +8,9 @@ import com.fasterxml.jackson.databind.jsontype.impl.LaissezFaireSubTypeValidator
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.data.redis.RedisProperties;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CachingConfigurerSupport;
 import org.springframework.cache.annotation.EnableCaching;
@@ -18,8 +20,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.cache.RedisCacheWriter;
+import org.springframework.data.redis.connection.RedisClusterConfiguration;
 import org.springframework.data.redis.connection.RedisPassword;
-import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceClientConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.connection.lettuce.LettucePoolingClientConfiguration;
@@ -27,8 +29,6 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
-
-import java.time.Duration;
 
 /**
  * RedisConfig
@@ -40,38 +40,15 @@ import java.time.Duration;
 @Slf4j
 @Configuration
 @EnableCaching
+@EnableConfigurationProperties(RedisProperties.class)
 public class RedisConfig extends CachingConfigurerSupport {
+
+    @Autowired
+    private RedisProperties redisProperties;
 
     public RedisConfig() {
         log.info("INIT Redis Config ... ");
     }
-
-    @Value("${spring.redis.host}")
-    private String host;
-
-    @Value("${spring.redis.port}")
-    private Integer port;
-
-    @Value("${spring.redis.database}")
-    private Integer database;
-
-    @Value("${spring.redis.password}")
-    private String password;
-
-    @Value("${spring.redis.timeout}")
-    private Long timeout;
-
-    @Value("${spring.redis.lettuce.pool.min-idle}")
-    private Integer minIdle;
-
-    @Value("${spring.redis.lettuce.pool.max-wait}")
-    private Integer maxWait;
-
-    @Value("${spring.redis.lettuce.pool.max-active}")
-    private Integer maxActive;
-
-    @Value("${spring.redis.lettuce.pool.max-idle}")
-    private Integer maxIdle;
 
     /**
      * 自定义缓存key的生成策略
@@ -163,31 +140,29 @@ public class RedisConfig extends CachingConfigurerSupport {
 
     @Bean
     public LettuceConnectionFactory lettuceConnectionFactory() {
-        RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration();
-        redisStandaloneConfiguration.setHostName(host);
-        redisStandaloneConfiguration.setPort(port);
-        redisStandaloneConfiguration.setDatabase(database);
-        redisStandaloneConfiguration.setPassword(RedisPassword.of(password));
-
+        RedisProperties.Cluster cluster = redisProperties.getCluster();
+        RedisClusterConfiguration redisClusterConfiguration = new RedisClusterConfiguration(cluster.getNodes());
+        redisClusterConfiguration.setMaxRedirects(cluster.getMaxRedirects());
+        redisClusterConfiguration.setPassword(RedisPassword.of(redisProperties.getPassword()));
+        RedisProperties.Pool pool = redisProperties.getLettuce().getPool();
         //连接池配置
         GenericObjectPoolConfig genericObjectPoolConfig = new GenericObjectPoolConfig();
-        genericObjectPoolConfig.setMaxIdle(maxIdle);
-        genericObjectPoolConfig.setMinIdle(minIdle);
-        genericObjectPoolConfig.setMaxTotal(maxActive);
-        genericObjectPoolConfig.setMaxWaitMillis(maxWait);
-
+        genericObjectPoolConfig.setMaxIdle(pool.getMaxIdle());
+        genericObjectPoolConfig.setMinIdle(pool.getMinIdle());
+        genericObjectPoolConfig.setMaxTotal(pool.getMaxActive());
+        genericObjectPoolConfig.setMaxWaitMillis(pool.getMaxWait().toMillis());
 
         //redis客户端配置
-        LettucePoolingClientConfiguration.LettucePoolingClientConfigurationBuilder
-                builder = LettucePoolingClientConfiguration.builder().
-                commandTimeout(Duration.ofMillis(timeout));
-        builder.poolConfig(genericObjectPoolConfig);
-        LettuceClientConfiguration lettuceClientConfiguration = builder.build();
+        LettuceClientConfiguration lettuceClientConfiguration = LettucePoolingClientConfiguration.builder().
+                commandTimeout(redisProperties.getTimeout())
+                .poolConfig(genericObjectPoolConfig)
+                .build()
+        ;
 
         //根据配置和客户端配置创建连接
         LettuceConnectionFactory lettuceConnectionFactory = new
-                LettuceConnectionFactory(redisStandaloneConfiguration, lettuceClientConfiguration);
-        log.info("Redis 连接池 加载完成 host -> [{}] port -> [{}]", host, port);
+                LettuceConnectionFactory(redisClusterConfiguration, lettuceClientConfiguration);
+        log.info("Redis 连接池 加载完成 Nodes -> [{}]", cluster.getNodes());
         return lettuceConnectionFactory;
     }
 }

@@ -18,4 +18,9 @@ public class AuthClientDetailsServiceImpl implements AuthClientDetailsService {
     public ClientDetails loadClientByClientId(String clientId) {
         return null;
     }
+
+    @Override
+    public void loadAllClientToCache() {
+
+    }
 }
