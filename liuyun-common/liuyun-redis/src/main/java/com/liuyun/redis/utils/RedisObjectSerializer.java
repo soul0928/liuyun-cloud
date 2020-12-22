@@ -1,9 +1,10 @@
 package com.liuyun.redis.utils;
 
-import org.springframework.core.convert.converter.Converter;
-import org.springframework.core.serializer.support.DeserializingConverter;
-import org.springframework.core.serializer.support.SerializingConverter;
+import cn.hutool.json.JSONUtil;
 import org.springframework.data.redis.serializer.RedisSerializer;
+
+import java.nio.charset.StandardCharsets;
+import java.util.Objects;
 
 /**
  * 定义的序列化操作表示可以序列化所有类的对象
@@ -18,29 +19,28 @@ public class RedisObjectSerializer implements RedisSerializer<Object> {
      * 做一个空数组，不是null
      */
     private static final byte[] EMPTY_BYTE_ARRAY = new byte[0];
-    /**
-     * 为了方便进行对象与字节数组的转换，所以应该首先准备出两个转换器
-     */
-    private Converter<Object, byte[]> SERIALIZING_CONVERTER = new SerializingConverter();
-    private Converter<byte[], Object> DESERIALIZING_CONVERTER = new DeserializingConverter();
+
+    public RedisObjectSerializer() {
+        super();
+    }
 
     @Override
     public byte[] serialize(Object obj) {
         // 这个时候没有要序列化的对象出现，所以返回的字节数组应该就是一个空数组
-        if (obj == null) {
+        if (Objects.isNull(obj)) {
             return EMPTY_BYTE_ARRAY;
         }
         // 将对象变为字节数组
-        return this.SERIALIZING_CONVERTER.convert(obj);
+        return JSONUtil.toJsonStr(obj).getBytes(StandardCharsets.UTF_8);
     }
 
     @Override
-    public Object deserialize(byte[] data) {
+    public Object deserialize(byte[] bytes) {
         // 此时没有对象的内容信息
-        if (data == null || data.length == 0) {
+        if (Objects.isNull(bytes) || bytes.length == 0) {
             return null;
         }
-        return this.DESERIALIZING_CONVERTER.convert(data);
+        return new String(bytes, StandardCharsets.UTF_8);
     }
 
 }

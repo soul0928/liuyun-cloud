@@ -45,7 +45,10 @@ public class AuthClientDetailsServiceImpl implements AuthClientDetailsService {
         list.forEach(i -> map.put(i.getClientId(), JSONUtil.toJsonStr(new AuthClientDetailsDTO(i))));
         redisService.hSetAll("liuyun:client", map);
 
-        Object clientDetails = redisService.hGet("liuyun:client", "test");
-        System.out.println(clientDetails);
+        Object obj = redisService.hGet("liuyun:client", "test");
+        System.out.println(obj);
+
+        OauthClientDetailsEntity oauthClientDetailsEntity = JSONUtil.toBean(obj.toString(), OauthClientDetailsEntity.class);
+        System.out.println(obj);
     }
 }

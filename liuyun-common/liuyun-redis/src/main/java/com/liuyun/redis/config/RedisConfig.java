@@ -1,11 +1,6 @@
 package com.liuyun.redis.config;
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.fasterxml.jackson.annotation.PropertyAccessor;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.jsontype.impl.LaissezFaireSubTypeValidator;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.liuyun.redis.utils.RedisObjectSerializer;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +22,6 @@ import org.springframework.data.redis.connection.lettuce.LettuceClientConfigurat
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.connection.lettuce.LettucePoolingClientConfiguration;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
@@ -109,22 +103,7 @@ public class RedisConfig extends CachingConfigurerSupport {
     public RedisTemplate<String, Object> redisTemplate() {
 
         // 设置序列化
-        Jackson2JsonRedisSerializer<Object> jackson2JsonRedisSerializer = new Jackson2JsonRedisSerializer<>(Object.class);
-        ObjectMapper om = new ObjectMapper();
-        // 指定要序列化的域，field,get和set,以及修饰符范围，ANY是都有包括private和public
-        om.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
-        om.registerModule(new JavaTimeModule());
-        // 指定序列化输入的类型，类必须是非final修饰的，final修饰的类，比如String,Integer抛出异常
-        om.activateDefaultTyping(LaissezFaireSubTypeValidator.instance, ObjectMapper.DefaultTyping.NON_FINAL, JsonTypeInfo.As.PROPERTY);
-
-        //  om.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        //        om.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
-        //        om.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
-        //        om.configure(DeserializationFeature.FAIL_ON_INVALID_SUBTYPE, false);
-        //        不适用默认的dateTime进行序列化,使用JSR310的LocalDateTimeSerializer
-        //        om.configure(SerializationFeature.WRITE_DATE_KEYS_AS_TIMESTAMPS, false);
-
-        jackson2JsonRedisSerializer.setObjectMapper(om);
+        RedisObjectSerializer redisObjectSerializer = new RedisObjectSerializer();
 
         RedisSerializer<?> stringSerializer = new StringRedisSerializer();
 
@@ -134,11 +113,11 @@ public class RedisConfig extends CachingConfigurerSupport {
         // key序列化
         redisTemplate.setKeySerializer(stringSerializer);
         // value序列化
-        redisTemplate.setValueSerializer(jackson2JsonRedisSerializer);
+        redisTemplate.setValueSerializer(redisObjectSerializer);
         // Hash key序列化
         redisTemplate.setHashKeySerializer(stringSerializer);
         // Hash value序列化
-        redisTemplate.setHashValueSerializer(jackson2JsonRedisSerializer);
+        redisTemplate.setHashValueSerializer(redisObjectSerializer);
         redisTemplate.afterPropertiesSet();
         return redisTemplate;
     }
