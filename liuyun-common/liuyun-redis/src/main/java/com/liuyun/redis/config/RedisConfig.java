@@ -1,9 +1,9 @@
 package com.liuyun.redis.config;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.jsontype.impl.LaissezFaireSubTypeValidator;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.extern.slf4j.Slf4j;
@@ -17,11 +17,12 @@ import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.interceptor.KeyGenerator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.cache.RedisCacheWriter;
-import org.springframework.data.redis.connection.RedisClusterConfiguration;
 import org.springframework.data.redis.connection.RedisPassword;
+import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceClientConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.connection.lettuce.LettucePoolingClientConfiguration;
@@ -79,7 +80,8 @@ public class RedisConfig extends CachingConfigurerSupport {
      * @author wangdong
      * @date 2020/12/11 1:53 下午
      **/
-    @Bean
+    @Primary
+    @Bean(name = "cacheManager")
     public CacheManager cacheManager(LettuceConnectionFactory lettuceConnectionFactory) {
         //以锁写入的方式创建RedisCacheWriter对象
         RedisCacheWriter writer = RedisCacheWriter.lockingRedisCacheWriter(lettuceConnectionFactory);
@@ -97,7 +99,7 @@ public class RedisConfig extends CachingConfigurerSupport {
     }
 
     /**
-     * 获取缓存操作助手对象 及其序列化方式
+     * redisTemplate 配置
      *
      * @return org.springframework.data.redis.core.RedisTemplate<java.lang.String, java.lang.Object>
      * @author wangdong
@@ -105,27 +107,30 @@ public class RedisConfig extends CachingConfigurerSupport {
      **/
     @Bean
     public RedisTemplate<String, Object> redisTemplate() {
+
         // 设置序列化
-        Jackson2JsonRedisSerializer<Object> jackson2JsonRedisSerializer = new Jackson2JsonRedisSerializer<>(
-                Object.class);
+        Jackson2JsonRedisSerializer<Object> jackson2JsonRedisSerializer = new Jackson2JsonRedisSerializer<>(Object.class);
         ObjectMapper om = new ObjectMapper();
-        om.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        om.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
-        om.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
-        om.configure(DeserializationFeature.FAIL_ON_INVALID_SUBTYPE, false);
-        // 不适用默认的dateTime进行序列化,使用JSR310的LocalDateTimeSerializer
-        om.configure(SerializationFeature.WRITE_DATE_KEYS_AS_TIMESTAMPS, false);
-        // 这是序列化LocalDateTIme和LocalDate的必要配置,由Jackson-data-JSR310实现
+        // 指定要序列化的域，field,get和set,以及修饰符范围，ANY是都有包括private和public
+        om.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
         om.registerModule(new JavaTimeModule());
-        // 必须配置
+        // 指定序列化输入的类型，类必须是非final修饰的，final修饰的类，比如String,Integer抛出异常
         om.activateDefaultTyping(LaissezFaireSubTypeValidator.instance, ObjectMapper.DefaultTyping.NON_FINAL, JsonTypeInfo.As.PROPERTY);
+
+        //  om.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        //        om.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
+        //        om.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+        //        om.configure(DeserializationFeature.FAIL_ON_INVALID_SUBTYPE, false);
+        //        不适用默认的dateTime进行序列化,使用JSR310的LocalDateTimeSerializer
+        //        om.configure(SerializationFeature.WRITE_DATE_KEYS_AS_TIMESTAMPS, false);
+
         jackson2JsonRedisSerializer.setObjectMapper(om);
-        // 配置redisTemplate
-        RedisTemplate<String, Object> redisTemplate = new RedisTemplate<String, Object>();
-        redisTemplate.setConnectionFactory(lettuceConnectionFactory());
+
         RedisSerializer<?> stringSerializer = new StringRedisSerializer();
 
-        redisTemplate.setDefaultSerializer(jackson2JsonRedisSerializer);
+        // 配置redisTemplate
+        RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
+        redisTemplate.setConnectionFactory(lettuceConnectionFactory());
         // key序列化
         redisTemplate.setKeySerializer(stringSerializer);
         // value序列化
@@ -140,10 +145,10 @@ public class RedisConfig extends CachingConfigurerSupport {
 
     @Bean
     public LettuceConnectionFactory lettuceConnectionFactory() {
-        RedisProperties.Cluster cluster = redisProperties.getCluster();
-        RedisClusterConfiguration redisClusterConfiguration = new RedisClusterConfiguration(cluster.getNodes());
-        redisClusterConfiguration.setMaxRedirects(cluster.getMaxRedirects());
-        redisClusterConfiguration.setPassword(RedisPassword.of(redisProperties.getPassword()));
+        RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration();
+        redisStandaloneConfiguration.setHostName(redisProperties.getHost());
+        redisStandaloneConfiguration.setPort(redisProperties.getPort());
+        redisStandaloneConfiguration.setPassword(RedisPassword.of(redisProperties.getPassword()));
         RedisProperties.Pool pool = redisProperties.getLettuce().getPool();
         //连接池配置
         GenericObjectPoolConfig genericObjectPoolConfig = new GenericObjectPoolConfig();
@@ -158,11 +163,10 @@ public class RedisConfig extends CachingConfigurerSupport {
                 .poolConfig(genericObjectPoolConfig)
                 .build()
         ;
-
         //根据配置和客户端配置创建连接
         LettuceConnectionFactory lettuceConnectionFactory = new
-                LettuceConnectionFactory(redisClusterConfiguration, lettuceClientConfiguration);
-        log.info("Redis 连接池 加载完成 Nodes -> [{}]", cluster.getNodes());
+                LettuceConnectionFactory(redisStandaloneConfiguration, lettuceClientConfiguration);
+        log.info("Redis 连接池 加载完成 HOST -> [{}] PORT -> [{}]", redisProperties.getHost(), redisProperties.getPort());
         return lettuceConnectionFactory;
     }
 }

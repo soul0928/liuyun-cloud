@@ -17,7 +17,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
  **/
 @Slf4j
 @Configuration
-@Import({AuthPasswordConfig.class, AuthKeyStoreConfig.class})
+@Import({AuthPasswordConfig.class})
 @ConfigurationPropertiesScan({"com.liuyun.oauth2.properties"})
 public class AuthSecurityConfig extends WebSecurityConfigurerAdapter {
 

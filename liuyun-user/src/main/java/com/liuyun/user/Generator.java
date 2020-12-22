@@ -8,9 +8,9 @@ package com.liuyun.user;
 public class Generator {
 
     public static void main(String[] args) {
-        String moduleName = "user";
+        String moduleName = "auth";
         String []tables = {
-                "sys_user",
+                "oauth_client_details",
         };
         com.liuyun.core.mybatisplus.Generator.generatorTables(moduleName, tables);
     }

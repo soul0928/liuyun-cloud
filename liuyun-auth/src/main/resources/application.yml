@@ -16,15 +16,8 @@ spring:
         service: ${spring.application.name}
         weight: 1
   redis:
-    cluster:
-      nodes:
-        - 123.57.73.216:7000
-        - 123.57.73.216:7001
-        - 123.57.73.216:7002
-        - 123.57.73.216:7003
-        - 123.57.73.216:7004
-        - 123.57.73.216:7005
-      max-redirects: 5
+    host: 123.57.73.216
+    port: 6379
     database: 0
     password: liuyun
     timeout: 10000
@@ -103,9 +96,3 @@ liuyun:
       menusPaths:
         - /aa/bb
         - /bb/aa
-
-encrypt:
-  key-store:
-    location: classpath:liuyun.jks
-    secret: liuyun
-    alias: liuyun

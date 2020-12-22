@@ -16,7 +16,6 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.A
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
-import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.redis.RedisTokenStore;
 
@@ -54,43 +53,19 @@ public class AuthServerConfig extends AuthorizationServerConfigurerAdapter {
     /**
      * 配置认证管理器
      *
-     * @return void
+     * @param endpoints {@link AuthorizationServerEndpointsConfigurer}
      * @author wangdong
-     * @date 2020/7/22 12:36 下午
+     * @date 2020/12/17 3:20 下午
      **/
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
-       // 配置认证管理器 redis
-       endpoints.authenticationManager(authenticationManager)
+        // 配置认证管理器 redis
+        endpoints.authenticationManager(authenticationManager)
                 //配置用户服务
                 .userDetailsService(authUserDetailsService)
-               .authorizationCodeServices(authRedisCodeService)
-               .exceptionTranslator(authResponseExceptionTranslator)
-                //配置token存储的服务与位置
-                .tokenServices(tokenService())
+                .authorizationCodeServices(authRedisCodeService)
+                .exceptionTranslator(authResponseExceptionTranslator)
                 .tokenStore(tokenStore());
-    }
-
-    /**
-     * 扩展 token 规则
-     * @author wangdong
-     * @date 2020/7/22 12:33 下午
-     * @return org.springframework.security.oauth2.provider.token.DefaultTokenServices
-     **/
-    @Bean
-    public DefaultTokenServices tokenService() {
-        DefaultTokenServices tokenServices = new DefaultTokenServices();
-        // 配置token存储
-        tokenServices.setTokenStore(tokenStore());
-        // 开启支持refresh_token，此处如果之前没有配置，启动服务后再配置重启服务，可能会导致不返回token的问题，解决方式：清除redis对应token存储
-        tokenServices.setSupportRefreshToken(true);
-        // 复用refresh_token
-        tokenServices.setReuseRefreshToken(true);
-        // token 有效期，设置12小时
-        tokenServices.setAccessTokenValiditySeconds(12 * 60 * 60);
-        // refresh_token有效期，设置一周
-        tokenServices.setRefreshTokenValiditySeconds(7 * 24 * 60 * 60);
-        return tokenServices;
     }
 
     /**
@@ -102,7 +77,10 @@ public class AuthServerConfig extends AuthorizationServerConfigurerAdapter {
      **/
     @Bean
     public TokenStore tokenStore() {
-        return new RedisTokenStore(redisService.getRedisConnectionFactory());
+        RedisTokenStore redisTokenStore = new RedisTokenStore(redisService.getRedisConnectionFactory());
+        // 设置redis token存储中的前缀
+        redisTokenStore.setPrefix("liuyun:token:");
+        return redisTokenStore;
     }
 
     /**
