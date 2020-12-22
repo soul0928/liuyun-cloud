@@ -25,5 +25,4 @@ public class AuthResponseExceptionTranslator implements WebResponseExceptionTran
         }
         return null;
     }
-
 }

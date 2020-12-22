@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth2.provider.ClientDetails;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,12 +32,13 @@ public class AuthClientDetailsServiceImpl implements AuthClientDetailsService {
     @Autowired
     private RedisService redisService;
 
-    @Override
-    public ClientDetails loadClientByClientId(String clientId) {
-        return null;
-    }
-
-    @Override
+    /**
+     * 加载 client 数据放入缓存
+     *
+     * @author wangdong
+     * @date 2020/12/22 10:46 上午
+     **/
+    @PostConstruct
     public void loadAllClientToCache() {
         List<OauthClientDetailsEntity> list = new LambdaQueryChainWrapper<>(this.oauthClientDetailsMapper)
                 .eq(OauthClientDetailsEntity::getDelFlag, OauthClientDetailsEntity.DEL_FLAG_NORMAL)
@@ -48,7 +50,16 @@ public class AuthClientDetailsServiceImpl implements AuthClientDetailsService {
         Object obj = redisService.hGet("liuyun:client", "test");
         System.out.println(obj);
 
-        OauthClientDetailsEntity oauthClientDetailsEntity = JSONUtil.toBean(obj.toString(), OauthClientDetailsEntity.class);
-        System.out.println(obj);
+        ClientDetails authClientDetailsDTO = JSONUtil.toBean(obj.toString(), AuthClientDetailsDTO.class);
+        System.out.println(authClientDetailsDTO);
+
     }
+
+    @Override
+    public ClientDetails loadClientByClientId(String clientId) {
+        Object obj = redisService.hGet("liuyun:client", clientId);
+        return JSONUtil.toBean(String.valueOf(obj), AuthClientDetailsDTO.class);
+    }
+
+
 }

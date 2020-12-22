@@ -63,9 +63,38 @@ public class AuthServerConfig extends AuthorizationServerConfigurerAdapter {
         endpoints.authenticationManager(authenticationManager)
                 //配置用户服务
                 .userDetailsService(authUserDetailsService)
-                .authorizationCodeServices(authRedisCodeService)
-                .exceptionTranslator(authResponseExceptionTranslator)
+                //.authorizationCodeServices(authRedisCodeService)
+                //.exceptionTranslator(authResponseExceptionTranslator)
                 .tokenStore(tokenStore());
+    }
+
+
+
+    /**
+     * 配置应用名称 应用id
+     * 配置OAuth2的客户端相关信息
+     *
+     * @param clients {@link ClientDetailsServiceConfigurer}
+     * @author wangdong
+     * @date 2020/12/15 9:26 下午
+     **/
+    @Override
+    public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
+        clients.inMemory()
+                .withClient("admin")
+                .secret(passwordEncoder.encode("admin"))
+                .authorizedGrantTypes("password", "refresh_token","authorization_code")
+                .accessTokenValiditySeconds(3600)
+                .refreshTokenValiditySeconds(864000)
+                .scopes("all")
+                .and()
+                .withClient("test")
+                .secret(passwordEncoder.encode("test"))
+                .authorizedGrantTypes("password", "refresh_token","authorization_code")
+                .scopes("all")
+                .redirectUris("http://www.baidu.com");
+
+        //clients.withClientDetails(authClientDetailsService);
     }
 
     /**
@@ -84,20 +113,6 @@ public class AuthServerConfig extends AuthorizationServerConfigurerAdapter {
     }
 
     /**
-     * 配置应用名称 应用id
-     * 配置OAuth2的客户端相关信息
-     *
-     * @param clients {@link ClientDetailsServiceConfigurer}
-     * @author wangdong
-     * @date 2020/12/15 9:26 下午
-     **/
-    @Override
-    public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-        clients.withClientDetails(authClientDetailsService);
-        authClientDetailsService.loadAllClientToCache();
-    }
-
-    /**
      * 对应于配置AuthorizationServer安全认证的相关信息
      * 创建ClientCredentialsTokenEndpointFilter核心过滤器
      *
@@ -108,9 +123,17 @@ public class AuthServerConfig extends AuthorizationServerConfigurerAdapter {
     @Override
     public void configure(AuthorizationServerSecurityConfigurer security) {
         // 获取令牌不需要认证，校验令牌需要认证，允许表单认证
-        security.tokenKeyAccess("isAuthenticated()")
+        /*security.tokenKeyAccess("isAuthenticated()")
                 .checkTokenAccess("permitAll()")
-                //让/oauth/token支持client_id以及client_secret作登录认证
+                // 让/oauth/token支持授权码模式
+                .allowFormAuthenticationForClients();*/
+
+
+        security
+                //不拦截所有获取token的访问
+                .tokenKeyAccess("permitAll()")
+                //验证token
+                .checkTokenAccess("isAuthenticated()")
                 .allowFormAuthenticationForClients();
     }
 }

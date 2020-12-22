@@ -1,14 +1,21 @@
 package com.liuyun.auth.config;
 
+import com.liuyun.auth.service.AuthUserDetailsService;
+import com.liuyun.oauth2.properties.AuthSecurityProperties;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 
 /**
  * @author wangdong
@@ -17,9 +24,21 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
  **/
 @Slf4j
 @Configuration
+@EnableResourceServer
 @Import({AuthPasswordConfig.class})
 @ConfigurationPropertiesScan({"com.liuyun.oauth2.properties"})
+@EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true, jsr250Enabled = true)
 public class AuthSecurityConfig extends WebSecurityConfigurerAdapter {
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private AuthSecurityProperties authSecurityProperties;
+
+    @Autowired
+    private AuthUserDetailsService authUserDetailsService;
+
 
     /**
      * 必须配置，否则SpringBoot会自动配置一个AuthenticationManager,覆盖掉内存中的用户
@@ -35,22 +54,21 @@ public class AuthSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     /**
-     * 配置http访问控制
-     *
-     * @param http http安全配置
-     * @throws Exception 异常
+     * 全局用户信息
      */
+    @Autowired
+    public void globalUserDetails(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(authUserDetailsService).passwordEncoder(passwordEncoder);
+    }
+
     @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http.cors()
-                .and()
-                .csrf()
-                .disable()
-                .anonymous()
-                .disable()
-                .authorizeRequests()
-                .antMatchers(HttpMethod.OPTIONS, "*")
-                .permitAll();
+    public void configure(HttpSecurity http) throws Exception {
+
+        http.csrf().disable();
+        http.authorizeRequests()
+                .antMatchers(HttpMethod.OPTIONS, authSecurityProperties.getIgnore().getUrls()).permitAll()
+                .anyRequest()
+                .authenticated();
     }
 
 }

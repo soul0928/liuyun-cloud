@@ -3,6 +3,9 @@ package com.liuyun.redis.config;
 import com.liuyun.redis.utils.RedisObjectSerializer;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
+import org.redisson.Redisson;
+import org.redisson.api.RedissonClient;
+import org.redisson.config.Config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.data.redis.RedisProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -147,5 +150,23 @@ public class RedisConfig extends CachingConfigurerSupport {
                 LettuceConnectionFactory(redisStandaloneConfiguration, lettuceClientConfiguration);
         log.info("Redis 连接池 加载完成 HOST -> [{}] PORT -> [{}]", redisProperties.getHost(), redisProperties.getPort());
         return lettuceConnectionFactory;
+    }
+
+    // @Bean
+    public RedissonClient redissonClient() {
+        Config config = new Config();
+        config.useSingleServer()
+                .setAddress("redis://" + redisProperties.getHost() + ":" + redisProperties.getPort())
+                .setPassword(redisProperties.getPassword())
+                .setDatabase(redisProperties.getDatabase())
+                .setTimeout(Math.toIntExact(redisProperties.getTimeout().getSeconds()))
+                .setConnectTimeout(Math.toIntExact(redisProperties.getTimeout().getSeconds()))
+                .setConnectionMinimumIdleSize(5);
+        // 监控锁的看门狗超时，单位：毫秒
+        // 加锁请求中未明确使用 leaseTimeout 参数的情况下 生效
+        config.setLockWatchdogTimeout(30000L);
+        RedissonClient redissonClient = Redisson.create(config);
+        log.info("RedissonClient 加载完成 HOST -> [{}] PORT -> [{}]", redisProperties.getHost(), redisProperties.getPort());
+        return redissonClient;
     }
 }
