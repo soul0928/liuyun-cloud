@@ -21,6 +21,9 @@ public class RedisService {
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
 
+    @Autowired
+    private RedisTemplate<String, Object> redisTemplate2;
+
     /**
      * 判断是否存在
      *
@@ -169,12 +172,20 @@ public class RedisService {
      * @author wangdong
      * @date 2020/12/15 4:09 下午
      **/
-    private RedisTemplate<String, Object> getRedisTemplate() {
+    public RedisTemplate<String, Object> getRedisTemplate() {
         return this.redisTemplate;
+    }
+
+    public RedisTemplate<String, Object> getRedisTemplate2() {
+        return this.redisTemplate2;
     }
 
     public RedisConnectionFactory getRedisConnectionFactory() {
         return this.getRedisTemplate().getConnectionFactory();
+    }
+
+    public RedisConnectionFactory getRedisConnectionFactory2() {
+        return this.getRedisTemplate2().getConnectionFactory();
     }
 
     private ValueOperations<String, Object> opsForValue() {

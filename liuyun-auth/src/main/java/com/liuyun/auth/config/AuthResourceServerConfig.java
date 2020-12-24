@@ -1,9 +1,7 @@
 package com.liuyun.auth.config;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
 
 import javax.servlet.http.HttpServletResponse;
@@ -16,8 +14,8 @@ import javax.servlet.http.HttpServletResponse;
  * @date 2020/12/22 17:44
  **/
 @Slf4j
-@Configuration
-@EnableResourceServer
+//@Configuration
+//@EnableResourceServer
 public class AuthResourceServerConfig extends ResourceServerConfigurerAdapter {
 
     @Override

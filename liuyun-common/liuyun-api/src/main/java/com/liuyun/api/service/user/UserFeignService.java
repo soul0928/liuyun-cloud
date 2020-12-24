@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
  * @date 2020/12/14 16:19
  **/
 @FeignClient(value = ServiceNameConstants.LIUYUN_USER,
-        path = "/ " + ServiceNameConstants.LIUYUN_USER + "/sysUser",
+        path = "/" + ServiceNameConstants.LIUYUN_USER + "/sysUser",
         fallbackFactory = UserFeignServiceFallbackFactory.class,
         contextId = "userFeignService",
         decode404 = true)
@@ -28,7 +28,7 @@ public interface UserFeignService {
      * @author wangdong
      * @date 2020/12/14 3:38 下午
      **/
-    @GetMapping("/info/{id}")
+    @GetMapping("/queryUserById/{id}")
     Result<SysUserInfoVO> queryUserById(@PathVariable("id") Long id);
 
     /**
@@ -39,6 +39,6 @@ public interface UserFeignService {
      * @author wangdong
      * @date 2020/12/14 3:38 下午
      **/
-    @GetMapping("/info/{username}")
+    @GetMapping("/queryUserByUsername/{username}")
     Result<SysUserInfoVO> queryUserByUsername(@PathVariable("username") String username);
 }

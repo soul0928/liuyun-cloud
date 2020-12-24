@@ -40,13 +40,10 @@ public class SysUserController extends IBaseController<SysUserEntity> {
      * @author wangdong
      * @date 2020/12/14 3:38 下午
      **/
-    @GetMapping("/info/{id}")
+    @GetMapping("/queryUserById/{id}")
     @ApiModelProperty("根据用户 id 获取用户信息")
-    public Result<SysUserInfoVO> info(@PathVariable("id") Long id) {
+    public Result<SysUserInfoVO> queryUserById(@PathVariable("id") Long id) {
         SysUserEntity sysUserEntity = this.sysUserService.getById(id);
-        if (Objects.isNull(sysUserEntity)) {
-            return Result.success();
-        }
         SysUserInfoVO sysUserInfoVO = BeanUtil.copyProperties(sysUserEntity, SysUserInfoVO.class);
         return Result.success(sysUserInfoVO);
     }
@@ -59,7 +56,7 @@ public class SysUserController extends IBaseController<SysUserEntity> {
      * @author wangdong
      * @date 2020/12/14 3:38 下午
      **/
-    @GetMapping("/info/{username}")
+    @GetMapping("/queryUserByUsername/{username}")
     @ApiModelProperty("根据用户账号获取用户信息")
     public Result<SysUserInfoVO> queryUserByUsername(@PathVariable("username") String username) {
         SysUserEntity sysUserEntity = new LambdaQueryChainWrapper<>(this.sysUserService.getBaseMapper())

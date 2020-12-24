@@ -34,11 +34,8 @@ public class OauthClientDetailsEntity extends IBaseEntity<OauthClientDetailsEnti
     @ApiModelProperty(value = "资源限定串(逗号分割)")
     private String resourceIds;
 
-    @ApiModelProperty(value = "应用密钥(bcyt) 加密")
+    @ApiModelProperty(value = "应用密钥")
     private String clientSecret;
-
-    @ApiModelProperty(value = "应用密钥明文")
-    private String clientSecretStr;
 
     @ApiModelProperty(value = "范围")
     private String scope;

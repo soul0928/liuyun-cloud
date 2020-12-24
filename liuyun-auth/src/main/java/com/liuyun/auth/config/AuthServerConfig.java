@@ -1,9 +1,9 @@
 package com.liuyun.auth.config;
 
-import com.liuyun.auth.config.handler.AuthResponseExceptionTranslator;
 import com.liuyun.auth.service.AuthClientDetailsService;
 import com.liuyun.auth.service.AuthRedisCodeService;
 import com.liuyun.auth.service.AuthUserDetailsService;
+import com.liuyun.redis.constants.AuthRedisConstants;
 import com.liuyun.redis.service.RedisService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,11 +29,15 @@ import org.springframework.security.oauth2.provider.token.store.redis.RedisToken
 @EnableAuthorizationServer
 public class AuthServerConfig extends AuthorizationServerConfigurerAdapter {
 
+
     @Autowired
-    private AuthenticationManager authenticationManager;
+    private RedisService redisService;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private AuthenticationManager authenticationManager;
 
     @Autowired
     private AuthUserDetailsService authUserDetailsService;
@@ -44,11 +48,9 @@ public class AuthServerConfig extends AuthorizationServerConfigurerAdapter {
     @Autowired
     private AuthRedisCodeService authRedisCodeService;
 
+/*
     @Autowired
-    private RedisService redisService;
-
-    @Autowired
-    private AuthResponseExceptionTranslator authResponseExceptionTranslator;
+    private AuthResponseExceptionTranslator authResponseExceptionTranslator;*/
 
     /**
      * 配置认证管理器
@@ -58,16 +60,15 @@ public class AuthServerConfig extends AuthorizationServerConfigurerAdapter {
      * @date 2020/12/17 3:20 下午
      **/
     @Override
-    public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
+    public void configure(AuthorizationServerEndpointsConfigurer endpoints) {
         // 配置认证管理器 redis
         endpoints.authenticationManager(authenticationManager)
                 //配置用户服务
                 .userDetailsService(authUserDetailsService)
-                //.authorizationCodeServices(authRedisCodeService)
+                .authorizationCodeServices(authRedisCodeService)
                 //.exceptionTranslator(authResponseExceptionTranslator)
                 .tokenStore(tokenStore());
     }
-
 
 
     /**
@@ -80,21 +81,7 @@ public class AuthServerConfig extends AuthorizationServerConfigurerAdapter {
      **/
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-        clients.inMemory()
-                .withClient("admin")
-                .secret(passwordEncoder.encode("admin"))
-                .authorizedGrantTypes("password", "refresh_token","authorization_code")
-                .accessTokenValiditySeconds(3600)
-                .refreshTokenValiditySeconds(864000)
-                .scopes("all")
-                .and()
-                .withClient("test")
-                .secret(passwordEncoder.encode("test"))
-                .authorizedGrantTypes("password", "refresh_token","authorization_code")
-                .scopes("all")
-                .redirectUris("http://www.baidu.com");
-
-        //clients.withClientDetails(authClientDetailsService);
+        clients.withClientDetails(authClientDetailsService);
     }
 
     /**
@@ -106,8 +93,9 @@ public class AuthServerConfig extends AuthorizationServerConfigurerAdapter {
      **/
     @Bean
     public TokenStore tokenStore() {
-        RedisTokenStore redisTokenStore = new RedisTokenStore(redisService.getRedisConnectionFactory());
+        RedisTokenStore redisTokenStore = new RedisTokenStore(redisService.getRedisConnectionFactory2());
         // 设置redis token存储中的前缀
+        String cacheKey = AuthRedisConstants.getKey(AuthRedisConstants.AUTH_PREFIX, AuthRedisConstants.TOKEN_PREFIX);
         redisTokenStore.setPrefix("liuyun:token:");
         return redisTokenStore;
     }
@@ -122,13 +110,6 @@ public class AuthServerConfig extends AuthorizationServerConfigurerAdapter {
      **/
     @Override
     public void configure(AuthorizationServerSecurityConfigurer security) {
-        // 获取令牌不需要认证，校验令牌需要认证，允许表单认证
-        /*security.tokenKeyAccess("isAuthenticated()")
-                .checkTokenAccess("permitAll()")
-                // 让/oauth/token支持授权码模式
-                .allowFormAuthenticationForClients();*/
-
-
         security
                 //不拦截所有获取token的访问
                 .tokenKeyAccess("permitAll()")

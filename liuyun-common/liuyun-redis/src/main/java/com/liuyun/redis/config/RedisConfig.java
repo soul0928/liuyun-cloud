@@ -1,6 +1,12 @@
 package com.liuyun.redis.config;
 
-import com.liuyun.redis.utils.RedisObjectSerializer;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.PropertyAccessor;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.MapperFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 import org.redisson.Redisson;
@@ -25,6 +31,7 @@ import org.springframework.data.redis.connection.lettuce.LettuceClientConfigurat
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.connection.lettuce.LettucePoolingClientConfiguration;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
@@ -95,6 +102,7 @@ public class RedisConfig extends CachingConfigurerSupport {
         return new RedisCacheManager(writer, config);
     }
 
+
     /**
      * redisTemplate 配置
      *
@@ -102,11 +110,11 @@ public class RedisConfig extends CachingConfigurerSupport {
      * @author wangdong
      * @date 2020/12/11 1:57 下午
      **/
-    @Bean
+    @Bean(value = "redisTemplate")
     public RedisTemplate<String, Object> redisTemplate() {
 
         // 设置序列化
-        RedisObjectSerializer redisObjectSerializer = new RedisObjectSerializer();
+        Jackson2JsonRedisSerializer<Object> objectJackson2JsonRedisSerializer = jackson2JsonRedisSerializer();
 
         RedisSerializer<?> stringSerializer = new StringRedisSerializer();
 
@@ -116,14 +124,53 @@ public class RedisConfig extends CachingConfigurerSupport {
         // key序列化
         redisTemplate.setKeySerializer(stringSerializer);
         // value序列化
-        redisTemplate.setValueSerializer(redisObjectSerializer);
+        redisTemplate.setValueSerializer(objectJackson2JsonRedisSerializer);
         // Hash key序列化
         redisTemplate.setHashKeySerializer(stringSerializer);
         // Hash value序列化
-        redisTemplate.setHashValueSerializer(redisObjectSerializer);
+        redisTemplate.setHashValueSerializer(objectJackson2JsonRedisSerializer);
         redisTemplate.afterPropertiesSet();
         return redisTemplate;
     }
+
+    /**
+     * redisTemplate 配置 (使用默认 value 序列化方式) JdkSerializationRedisSerializer
+     *
+     * @return org.springframework.data.redis.core.RedisTemplate<java.lang.String, java.lang.Object>
+     * @author wangdong
+     * @date 2020/12/11 1:57 下午
+     **/
+    @Bean(value = "redisTemplate2")
+    public RedisTemplate<String, Object> redisTemplate2() {
+        RedisSerializer<?> stringSerializer = new StringRedisSerializer();
+        // 配置redisTemplate
+        RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
+        redisTemplate.setConnectionFactory(lettuceConnectionFactory());
+        // key序列化
+        redisTemplate.setKeySerializer(stringSerializer);
+        // Hash key序列化
+        redisTemplate.setHashKeySerializer(stringSerializer);
+        redisTemplate.afterPropertiesSet();
+        return redisTemplate;
+    }
+
+    private Jackson2JsonRedisSerializer<Object> jackson2JsonRedisSerializer() {
+        Jackson2JsonRedisSerializer<Object> jackson2JsonRedisSerializer =
+                new Jackson2JsonRedisSerializer<>(Object.class);
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
+        objectMapper.configure(MapperFeature.USE_ANNOTATIONS, false);
+        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+        // 此项必须配置，否则会报java.lang.ClassCastException: java.util.LinkedHashMap cannot be cast to XXX
+
+        // objectMapper.activateDefaultTyping(LaissezFaireSubTypeValidator.instance, ObjectMapper.DefaultTyping.NON_FINAL, JsonTypeInfo.As.PROPERTY);
+
+        objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+        jackson2JsonRedisSerializer.setObjectMapper(objectMapper);
+        return jackson2JsonRedisSerializer;
+    }
+
 
     @Bean
     public LettuceConnectionFactory lettuceConnectionFactory() {
@@ -152,21 +199,34 @@ public class RedisConfig extends CachingConfigurerSupport {
         return lettuceConnectionFactory;
     }
 
-    // @Bean
+    @Bean
     public RedissonClient redissonClient() {
         Config config = new Config();
         config.useSingleServer()
-                .setAddress("redis://" + redisProperties.getHost() + ":" + redisProperties.getPort())
-                .setPassword(redisProperties.getPassword())
-                .setDatabase(redisProperties.getDatabase())
-                .setTimeout(Math.toIntExact(redisProperties.getTimeout().getSeconds()))
-                .setConnectTimeout(Math.toIntExact(redisProperties.getTimeout().getSeconds()))
-                .setConnectionMinimumIdleSize(5);
+                .setAddress("redis://123.57.73.216:6379")
+                .setPassword(redisProperties.getPassword());
+                //.setDatabase(redisProperties.getDatabase())
+                //.setTimeout(Math.toIntExact(redisProperties.getTimeout().getSeconds()))
+                //.setConnectTimeout(Math.toIntExact(redisProperties.getTimeout().getSeconds()))
+                //.setConnectionMinimumIdleSize(5);
         // 监控锁的看门狗超时，单位：毫秒
         // 加锁请求中未明确使用 leaseTimeout 参数的情况下 生效
         config.setLockWatchdogTimeout(30000L);
         RedissonClient redissonClient = Redisson.create(config);
         log.info("RedissonClient 加载完成 HOST -> [{}] PORT -> [{}]", redisProperties.getHost(), redisProperties.getPort());
         return redissonClient;
+    }
+
+    public static void main(String[] args) {
+        Config config = new Config();
+        config.useSingleServer()
+                .setAddress("redis://123.57.73.216:6379")
+                .setPassword("liuyun");
+        // 监控锁的看门狗超时，单位：毫秒
+        // 加锁请求中未明确使用 leaseTimeout 参数的情况下 生效
+        config.setLockWatchdogTimeout(30000L);
+        RedissonClient redissonClient = Redisson.create(config);
+        log.info("RedissonClient 加载完成 redissonClient -> [{}] ", redissonClient);
+
     }
 }

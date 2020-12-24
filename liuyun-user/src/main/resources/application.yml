@@ -21,7 +21,7 @@ spring:
     host: 123.57.73.216
     port: 6379
     database: 0
-    password:
+    password: liuyun
     timeout: 10000
     lettuce:
       pool:

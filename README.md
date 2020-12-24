@@ -1,4 +1,4 @@
 -----
 
 
-http://localhost:19080/oauth/authorize?response_type=code&client_id=test&redirect_uri=http://www.liuyunm.com&scope=all
+http://localhost:19080/oauth/authorize?client_id=admin&response_type=code&redirect_uri=http://www.liuyum.com
