@@ -9,6 +9,7 @@ import com.liuyun.model.user.vo.SysUserInfoVO;
 import com.liuyun.user.modules.service.SysUserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModelProperty;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,7 +23,6 @@ import java.util.Objects;
  *
  * @author WangDong
  * @since 2020年12月7日 下午2:11:57
-
  */
 @RestController
 @RequestMapping("/sysUser")
@@ -42,8 +42,11 @@ public class SysUserController extends IBaseController<SysUserEntity> {
      **/
     @GetMapping("/queryUserById/{id}")
     @ApiModelProperty("根据用户 id 获取用户信息")
-    public Result<SysUserInfoVO> queryUserById(@PathVariable("id") Long id) {
+    public Result<SysUserInfoVO> queryUserById(@ApiParam(value = "用户ID", required = true) @PathVariable("id") Long id) {
         SysUserEntity sysUserEntity = this.sysUserService.getById(id);
+        if (Objects.isNull(sysUserEntity)) {
+            return Result.fail("用户信息不存在!!!");
+        }
         SysUserInfoVO sysUserInfoVO = BeanUtil.copyProperties(sysUserEntity, SysUserInfoVO.class);
         return Result.success(sysUserInfoVO);
     }
@@ -58,12 +61,12 @@ public class SysUserController extends IBaseController<SysUserEntity> {
      **/
     @GetMapping("/queryUserByUsername/{username}")
     @ApiModelProperty("根据用户账号获取用户信息")
-    public Result<SysUserInfoVO> queryUserByUsername(@PathVariable("username") String username) {
+    public Result<SysUserInfoVO> queryUserByUsername(@ApiParam(value = "用户账号", required = true) @PathVariable("username") String username) {
         SysUserEntity sysUserEntity = new LambdaQueryChainWrapper<>(this.sysUserService.getBaseMapper())
                 .eq(SysUserEntity::getUsername, username)
                 .one();
         if (Objects.isNull(sysUserEntity)) {
-            return Result.success();
+            return Result.fail("用户信息不存在!!!");
         }
         SysUserInfoVO sysUserInfoVO = BeanUtil.copyProperties(sysUserEntity, SysUserInfoVO.class);
         return Result.success(sysUserInfoVO);

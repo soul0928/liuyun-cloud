@@ -27,7 +27,7 @@ public class AuthRedisConstants extends AbstractRedisConstants {
     /**
      * 获取缓存 token 信息 前缀
      */
-    public final static String TOKEN_PREFIX = "token";
+    public final static String TOKEN_PREFIX = "token:";
 
 
 }

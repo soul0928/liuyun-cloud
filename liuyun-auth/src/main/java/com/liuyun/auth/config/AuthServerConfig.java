@@ -1,5 +1,6 @@
 package com.liuyun.auth.config;
 
+import com.liuyun.auth.config.handler.AuthOauthHandle;
 import com.liuyun.auth.service.AuthClientDetailsService;
 import com.liuyun.auth.service.AuthRedisCodeService;
 import com.liuyun.auth.service.AuthUserDetailsService;
@@ -9,13 +10,17 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.common.exceptions.OAuth2Exception;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
+import org.springframework.security.oauth2.provider.error.WebResponseExceptionTranslator;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.redis.RedisTokenStore;
 
@@ -27,30 +32,25 @@ import org.springframework.security.oauth2.provider.token.store.redis.RedisToken
 @Slf4j
 @Configuration
 @EnableAuthorizationServer
+@Import({AuthOauthHandle.class})
 public class AuthServerConfig extends AuthorizationServerConfigurerAdapter {
 
 
     @Autowired
     private RedisService redisService;
-
     @Autowired
     private PasswordEncoder passwordEncoder;
-
     @Autowired
     private AuthenticationManager authenticationManager;
-
     @Autowired
     private AuthUserDetailsService authUserDetailsService;
-
     @Autowired
     private AuthClientDetailsService authClientDetailsService;
-
     @Autowired
     private AuthRedisCodeService authRedisCodeService;
-
-/*
     @Autowired
-    private AuthResponseExceptionTranslator authResponseExceptionTranslator;*/
+    private WebResponseExceptionTranslator<OAuth2Exception> webResponseExceptionTranslator;
+
 
     /**
      * 配置认证管理器
@@ -63,11 +63,16 @@ public class AuthServerConfig extends AuthorizationServerConfigurerAdapter {
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) {
         // 配置认证管理器 redis
         endpoints.authenticationManager(authenticationManager)
+                // 支持GET  POST  请求获取token
+                .allowedTokenEndpointRequestMethods(HttpMethod.GET, HttpMethod.POST)
                 //配置用户服务
                 .userDetailsService(authUserDetailsService)
                 .authorizationCodeServices(authRedisCodeService)
-                //.exceptionTranslator(authResponseExceptionTranslator)
-                .tokenStore(tokenStore());
+                .exceptionTranslator(webResponseExceptionTranslator)
+                .tokenStore(tokenStore())
+        // .reuseRefreshTokens(true)
+        ;
+
     }
 
 
@@ -81,7 +86,13 @@ public class AuthServerConfig extends AuthorizationServerConfigurerAdapter {
      **/
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-        clients.withClientDetails(authClientDetailsService);
+        // clients.withClientDetails(authClientDetailsService);
+        clients.inMemory()
+                .withClient("admin")
+                .secret(passwordEncoder.encode("admin"))
+                .scopes("all")
+                .authorizedGrantTypes("password","refresh_token","authorization_code")
+                .redirectUris("http://www.liuyunm.com");
     }
 
     /**
@@ -96,7 +107,7 @@ public class AuthServerConfig extends AuthorizationServerConfigurerAdapter {
         RedisTokenStore redisTokenStore = new RedisTokenStore(redisService.getRedisConnectionFactory2());
         // 设置redis token存储中的前缀
         String cacheKey = AuthRedisConstants.getKey(AuthRedisConstants.AUTH_PREFIX, AuthRedisConstants.TOKEN_PREFIX);
-        redisTokenStore.setPrefix("liuyun:token:");
+        redisTokenStore.setPrefix(cacheKey);
         return redisTokenStore;
     }
 
@@ -117,4 +128,17 @@ public class AuthServerConfig extends AuthorizationServerConfigurerAdapter {
                 .checkTokenAccess("isAuthenticated()")
                 .allowFormAuthenticationForClients();
     }
+
+    //定义授权和令牌端点和令牌服务
+    //刷新令牌时需要的认证管理和用户信息来源
+
+
+    // 默认处于安全，会把UsernameNotFoundException转为BadCredentialsException，就是 “坏的凭据”，注入下面配置的bean
+    /*@Bean
+    public AuthenticationProvider daoAuthenticationProvider() {
+        DaoAuthenticationProvider impl = new DaoAuthenticationProvider();
+        impl.setUserDetailsService(authUserDetailsService);
+        impl.setHideUserNotFoundExceptions(false);
+        return impl;
+    }*/
 }

@@ -34,6 +34,15 @@ public class GlobalExceptionHandler {
         return Result.fail(e.getCode(), e.getMessage());
     }
 
+    /**
+     * 处理自定义异常
+     */
+    @ExceptionHandler(AuthException.class)
+    public Result<String> authException(AuthException e) {
+        log.error(e.getMessage(), e);
+        return Result.fail(e.getCode(), e.getMessage());
+    }
+
     @ExceptionHandler(BindException.class)
     public Result<String> bindException(BindException e) {
         log.error(e.getMessage(), e);

@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
  */
 @RestController
-@RequestMapping("/oauthClientDetailsEntity")
+@RequestMapping("/oauthClientDetails")
 @Api(tags = "服务")
 public class OauthClientDetailsController extends IBaseController<OauthClientDetailsEntity> {
     @Autowired

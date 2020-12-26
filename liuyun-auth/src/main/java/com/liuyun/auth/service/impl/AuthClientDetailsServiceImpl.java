@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.provider.ClientDetails;
-import org.springframework.security.oauth2.provider.NoSuchClientException;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -95,10 +94,11 @@ public class AuthClientDetailsServiceImpl implements AuthClientDetailsService {
                     return clientDetails;
                 }
             }
-            throw new NoSuchClientException("该客户端不存在 clientId : " + clientId);
+            log.info("该客户端不存在 clientId : " + clientId);
+            return null;
         } catch (Exception e) {
             log.info("根据 clientId 查询客户端信息, 查询失败 -> [{}]", e.getMessage());
-            throw new NoSuchClientException("该客户端不存在 clientId : " + clientId);
+            return null;
         } finally {
             if (lock.isHeldByCurrentThread()) {
                 lock.unlock();

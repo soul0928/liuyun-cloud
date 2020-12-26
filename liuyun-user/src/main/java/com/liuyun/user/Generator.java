@@ -10,7 +10,10 @@ public class Generator {
     public static void main(String[] args) {
         String moduleName = "auth";
         String []tables = {
-                "oauth_client_details",
+                "sys_role",
+                "sys_permission",
+                "sys_role_permission",
+                "sys_user_role"
         };
         com.liuyun.core.mybatisplus.Generator.generatorTables(moduleName, tables);
     }

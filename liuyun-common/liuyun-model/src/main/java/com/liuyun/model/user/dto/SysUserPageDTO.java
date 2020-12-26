@@ -41,6 +41,6 @@ public class SysUserPageDTO extends IBasePageDTO<SysUserPageDTO> {
     @ApiModelProperty(value = "头像路径")
     private String avatarUrl;
 
-    @ApiModelProperty(value = "帐号状态（0正常 1停用）")
+    @ApiModelProperty(value = "帐号状态(100:启用; 200:禁用)")
     private Integer status;
 }

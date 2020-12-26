@@ -35,12 +35,12 @@ public class SysUserInfoVO {
     @ApiModelProperty(value = "openid")
     private String openid;
 
-    @ApiModelProperty(value = "用户性别（0男 1女 2未知）")
+    @ApiModelProperty(value = "用户性别（0:男; 1:女; 2:未知）")
     private Integer sex;
 
     @ApiModelProperty(value = "头像路径")
     private String avatarUrl;
 
-    @ApiModelProperty(value = "帐号状态（0正常 1停用）")
+    @ApiModelProperty(value = "帐号状态(100:启用; 200:禁用)")
     private Integer status;
 }
