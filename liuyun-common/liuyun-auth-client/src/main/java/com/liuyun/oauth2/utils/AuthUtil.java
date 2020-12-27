@@ -1,7 +1,7 @@
 package com.liuyun.oauth2.utils;
 
-import com.liuyun.oauth2.constants.Oauth2Constants;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 
 import javax.servlet.http.HttpServletRequest;
@@ -43,7 +43,7 @@ public class AuthUtil {
      * @date 2020/12/25 5:27 下午
      **/
     private static String extractHeaderToken(HttpServletRequest request) {
-        Enumeration<String> headers = request.getHeaders(Oauth2Constants.TOKEN_HEADER);
+        Enumeration<String> headers = request.getHeaders(HttpHeaders.AUTHORIZATION);
         while (headers.hasMoreElements()) {
             String value = headers.nextElement();
             if ((value.toLowerCase().startsWith(OAuth2AccessToken.BEARER_TYPE.toLowerCase()))) {

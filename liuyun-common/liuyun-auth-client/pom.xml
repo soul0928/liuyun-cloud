@@ -36,8 +36,19 @@
         </dependency>
 
         <dependency>
+            <groupId>com.liuyun.core</groupId>
+            <artifactId>liuyun-core</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>com.liuyun.utils</groupId>
             <artifactId>liuyun-utils</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>com.liuyun.redis</groupId>
+            <artifactId>liuyun-redis</artifactId>
+        </dependency>
+
     </dependencies>
 </project>

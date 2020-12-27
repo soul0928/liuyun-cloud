@@ -1,0 +1,18 @@
+{
+  "properties": [
+    {
+      "name": "liuyun.security.ignore.httpUrls",
+      "type": "java.lang.String",
+      "description": "Description for liuyun.security.ignore.httpUrls."
+    },
+    {
+      "name": "liuyun.security.ignore.menusPaths",
+      "type": "java.lang.String",
+      "description": "Description for liuyun.security.ignore.menusPaths."
+    },
+    {
+      "name": "liuyun.security.enable",
+      "type": "java.lang.String",
+      "description": "Description for liuyun.security.enable."
+    }
+  ] }

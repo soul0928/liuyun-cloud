@@ -89,6 +89,7 @@ mybatis-plus:
 
 liuyun:
   security:
+    enable: true
     ignore:
       httpUrls:
         - /aa/bb
@@ -96,3 +97,4 @@ liuyun:
       menusPaths:
         - /aa/bb
         - /bb/aa
+    onlyFetchByGateway: false

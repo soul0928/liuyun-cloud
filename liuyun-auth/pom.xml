@@ -55,16 +55,6 @@
         </dependency>
 
         <dependency>
-            <groupId>com.liuyun.redis</groupId>
-            <artifactId>liuyun-redis</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.liuyun.oauth2</groupId>
-            <artifactId>liuyun-auth-client</artifactId>
-        </dependency>
-
-        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
