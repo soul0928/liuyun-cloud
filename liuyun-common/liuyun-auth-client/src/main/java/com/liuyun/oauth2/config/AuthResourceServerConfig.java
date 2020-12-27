@@ -1,6 +1,5 @@
 package com.liuyun.oauth2.config;
 
-import com.liuyun.oauth2.constants.EndpointConstant;
 import com.liuyun.oauth2.handler.AuthAccessDeniedHandler;
 import com.liuyun.oauth2.handler.AuthExceptionEntryPoint;
 import com.liuyun.oauth2.properties.AuthSecurityProperties;
@@ -41,7 +40,7 @@ public class AuthResourceServerConfig extends ResourceServerConfigurerAdapter {
                 .and()
                 .csrf().disable()
                 .httpBasic().disable()
-                .requestMatchers().antMatchers(EndpointConstant.ALL)
+                .requestMatchers().antMatchers("/oauth/**")
                 .and()
                 .authorizeRequests()
                 .antMatchers(authSecurityProperties.getIgnore().getUrls()).permitAll()
