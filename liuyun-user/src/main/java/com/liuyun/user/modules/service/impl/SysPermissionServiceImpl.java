@@ -1,10 +1,15 @@
 package com.liuyun.user.modules.service.impl;
 
+import com.liuyun.core.mybatisplus.enums.DelFlagEnum;
 import com.liuyun.core.mybatisplus.service.impl.IBaseServiceImpl;
 import com.liuyun.model.user.entity.SysPermissionEntity;
+import com.liuyun.model.user.entity.SysUserRoleEntity;
 import com.liuyun.user.modules.mapper.SysPermissionMapper;
 import com.liuyun.user.modules.service.SysPermissionService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Set;
 
 /**
  * 基础权限表 服务实现类
@@ -16,5 +21,22 @@ import org.springframework.stereotype.Service;
 public class SysPermissionServiceImpl
         extends IBaseServiceImpl<SysPermissionMapper, SysPermissionEntity> implements SysPermissionService {
 
+    @Autowired
+    private SysPermissionMapper sysPermissionMapper;
 
+    /**
+     * 根据 用户ID 获取用户权限信息
+     *
+     * @param userId {@link Long} 用户ID
+     * @return java.util.Set<java.lang.String>
+     * @author wangdong
+     * @date 2020/12/28 12:31 上午
+     **/
+    @Override
+    public Set<String> getPermissionsByUserId(Long userId) {
+        SysUserRoleEntity sysUserRoleEntity = new SysUserRoleEntity();
+        sysUserRoleEntity.setUserId(userId);
+        sysUserRoleEntity.setDelFlag(DelFlagEnum.NOT_DELETED);
+        return this.sysPermissionMapper.getPermissionsByUserId(sysUserRoleEntity);
+    }
 }

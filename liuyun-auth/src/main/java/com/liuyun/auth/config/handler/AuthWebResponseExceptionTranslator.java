@@ -60,7 +60,9 @@ public class AuthWebResponseExceptionTranslator implements WebResponseExceptionT
             if (StringUtils.containsIgnoreCase(e.getMessage(), "locked")) {
                 oAuth2Exception = new AuthOauth2Exception("用户已被锁定，请联系管理员!!!", e);
             }
-            oAuth2Exception = new AuthOauth2Exception("用户名或密码错误!!!", e);
+            if (StringUtils.containsIgnoreCase(e.getMessage(), "Bad credentials")) {
+                oAuth2Exception = new AuthOauth2Exception("账号或密码错误!!!", e);
+            }
         }
         if (Objects.isNull(oAuth2Exception)) {
             oAuth2Exception = new AuthOauth2Exception("系统异常!!!", e);

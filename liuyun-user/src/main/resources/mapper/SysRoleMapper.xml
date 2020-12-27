@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.liuyun.user.modules.mapper.SysRoleMapper">
     <select id="getRolesByUserId" resultType="java.lang.String">
-        SELECT role_code
+        SELECT DISTINCT sr.role_code
         FROM sys_role sr
                      LEFT JOIN sys_user_role sur ON sr.id = sur.role_id
         WHERE sur.user_id = #{userId}

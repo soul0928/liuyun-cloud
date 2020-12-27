@@ -5,12 +5,10 @@ import com.liuyun.oauth2.handler.AuthExceptionEntryPoint;
 import com.liuyun.oauth2.properties.AuthSecurityProperties;
 import com.liuyun.redis.constants.AuthRedisConstants;
 import com.liuyun.redis.service.RedisService;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
-import org.springframework.security.oauth2.provider.expression.OAuth2WebSecurityExpressionHandler;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.redis.RedisTokenStore;
 
@@ -23,10 +21,10 @@ import java.util.UUID;
  * @version 1.0.0
  * @date 2020/12/27 00:02
  **/
+@Configuration
 @Import(RedisService.class)
-@EnableGlobalMethodSecurity(prePostEnabled = true)
 @ConfigurationPropertiesScan({"com.liuyun.oauth2.properties"})
-@ConditionalOnProperty(prefix = "liuyun.security", name = "enable", havingValue = "true", matchIfMissing = true)
+//@ConditionalOnProperty(prefix = "liuyun.security", name = "enable", havingValue = "true", matchIfMissing = true)
 public class AuthSecurityAutoConfig {
 
     private final RedisService redisService;
@@ -46,11 +44,6 @@ public class AuthSecurityAutoConfig {
     @Bean
     public AuthExceptionEntryPoint authExceptionEntryPoint() {
         return new AuthExceptionEntryPoint();
-    }
-
-    @Bean
-    public OAuth2WebSecurityExpressionHandler auth2WebSecurityExpressionHandler() {
-        return new OAuth2WebSecurityExpressionHandler();
     }
 
     /**
@@ -76,9 +69,9 @@ public class AuthSecurityAutoConfig {
         return new AuthInterceptorConfig(authSecurityProperties);
     }
 
-    @Bean
+   /* @Bean
     public AuthResourceServerConfig authResourceServerConfig() {
-        return new AuthResourceServerConfig(authSecurityProperties, authAccessDeniedHandler(), authExceptionEntryPoint(),
-                auth2WebSecurityExpressionHandler(), tokenStore());
-    }
+        return new AuthResourceServerConfig(authSecurityProperties, this.authAccessDeniedHandler(), authExceptionEntryPoint(),
+                tokenStore());
+    }*/
 }

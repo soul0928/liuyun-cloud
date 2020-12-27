@@ -9,8 +9,6 @@ import com.liuyun.user.modules.service.SysRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -39,7 +37,6 @@ public class SysRoleServiceImpl
         SysUserRoleEntity sysUserRoleEntity = new SysUserRoleEntity();
         sysUserRoleEntity.setUserId(userId);
         sysUserRoleEntity.setDelFlag(DelFlagEnum.NOT_DELETED);
-        List<String> list = this.sysRoleMapper.getRolesByUserId(sysUserRoleEntity);
-        return new HashSet<>(list);
+        return this.sysRoleMapper.getRolesByUserId(sysUserRoleEntity);
     }
 }

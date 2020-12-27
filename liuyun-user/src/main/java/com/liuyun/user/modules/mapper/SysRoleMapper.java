@@ -5,7 +5,7 @@ import com.liuyun.model.user.entity.SysRoleEntity;
 import com.liuyun.model.user.entity.SysUserRoleEntity;
 import org.apache.ibatis.annotations.Mapper;
 
-import java.util.List;
+import java.util.Set;
 
 /**
  * 基础角色表 Mapper 接口
@@ -24,5 +24,5 @@ public interface SysRoleMapper extends IBaseMapper<SysRoleEntity> {
      * @author wangdong
      * @date 2020/12/25 1:31 下午
      **/
-    List<String> getRolesByUserId(SysUserRoleEntity sysUserRoleEntity);
+    Set<String> getRolesByUserId(SysUserRoleEntity sysUserRoleEntity);
 }

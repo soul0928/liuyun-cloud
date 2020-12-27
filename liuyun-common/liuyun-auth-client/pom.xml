@@ -50,5 +50,10 @@
             <artifactId>liuyun-redis</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>com.liuyun.api</groupId>
+            <artifactId>liuyun-api</artifactId>
+        </dependency>
+
     </dependencies>
 </project>

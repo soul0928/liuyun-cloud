@@ -45,11 +45,6 @@
         </dependency>
 
         <dependency>
-            <groupId>com.liuyun.api</groupId>
-            <artifactId>liuyun-api</artifactId>
-        </dependency>
-
-        <dependency>
             <groupId>com.liuyun.oauth2</groupId>
             <artifactId>liuyun-auth-client</artifactId>
         </dependency>

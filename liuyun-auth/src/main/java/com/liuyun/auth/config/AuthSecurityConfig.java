@@ -2,7 +2,6 @@ package com.liuyun.auth.config;
 
 import com.liuyun.auth.service.AuthUserDetailsService;
 import com.liuyun.oauth2.constants.EndpointConstant;
-import com.liuyun.oauth2.properties.AuthSecurityProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -32,8 +31,8 @@ public class AuthSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @Autowired
-    private AuthSecurityProperties authSecurityProperties;
+    //@Autowired
+    //private AuthSecurityProperties authSecurityProperties;
 
     @Autowired
     private AuthUserDetailsService authUserDetailsService;
@@ -45,7 +44,7 @@ public class AuthSecurityConfig extends WebSecurityConfigurerAdapter {
     private LogoutSuccessHandler logoutSuccessHandler;
 
     /**
-     * 必须配置
+     * 必须配置 调用此方法才能支持 password 模式
      *
      * @return 认证管理对象
      * @author wangdong
@@ -89,6 +88,7 @@ public class AuthSecurityConfig extends WebSecurityConfigurerAdapter {
                 .logoutSuccessHandler(logoutSuccessHandler)
                 .clearAuthentication(true)
                 .permitAll();
+
     }
 
 }
