@@ -7,6 +7,11 @@ spring:
     active: dev
   application:
     name: liuyun-auth
+  thymeleaf:
+    enabled: true
+    cache: false
+    suffix: .html
+    prefix: classpath:/templates/
   cloud:
     nacos:
       discovery:
@@ -86,6 +91,14 @@ mybatis-plus:
       logic-delete-value: 1 # 逻辑已删除值(默认为 1)
       logic-not-delete-value: 0 # 逻辑未删除值(默认为 0)
       id-type: assign_id
+
+encrypt:
+  key-store:
+    location: classpath:liuyun.jks
+    password: liuyun    # 密钥库密码
+    alias: liuyun       # 密钥别名
+    secret: liuyun      # 密钥
+    type: jks
 
 liuyun:
   security:

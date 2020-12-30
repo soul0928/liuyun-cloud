@@ -3,6 +3,7 @@ package com.liuyun.oauth2.properties;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
+import org.springframework.context.annotation.Configuration;
 
 /**
  * @author wangdong
@@ -11,6 +12,7 @@ import org.springframework.cloud.context.config.annotation.RefreshScope;
  **/
 @Data
 @RefreshScope
+@Configuration
 @ConfigurationProperties(prefix = "liuyun.security")
 public class AuthSecurityProperties {
 

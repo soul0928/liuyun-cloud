@@ -2,13 +2,12 @@ package com.liuyun.oauth2.config;
 
 import com.liuyun.oauth2.interceptor.AuthServerProtectInterceptor;
 import com.liuyun.oauth2.properties.AuthSecurityProperties;
-import org.springframework.context.annotation.Bean;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
- * @author MrBird
+ *
  */
 public class AuthInterceptorConfig implements WebMvcConfigurer {
 
@@ -18,7 +17,7 @@ public class AuthInterceptorConfig implements WebMvcConfigurer {
         this.authSecurityProperties = authSecurityProperties;
     }
 
-    @Bean
+    //@Bean
     public HandlerInterceptor authServerProtectInterceptor() {
         return new AuthServerProtectInterceptor(authSecurityProperties);
     }
