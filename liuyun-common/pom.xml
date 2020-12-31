@@ -26,7 +26,6 @@
         <module>liuyun-redis</module>
         <module>liuyun-swagger2</module>
         <module>liuyun-api</module>
-        <module>liuyun-auth-client</module>
     </modules>
 
     <properties>

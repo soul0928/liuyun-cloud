@@ -2,18 +2,22 @@ package com.liuyun.core.exception;
 
 
 import com.liuyun.core.global.enums.GlobalResultEnum;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * 自定义全局异常类
  * @author wangdong
  * @date 2020/7/27 8:16 下午
  **/
+@Data
+@EqualsAndHashCode(callSuper = true)
 public class GlobalException extends RuntimeException {
 
     private static final long serialVersionUID = 1L;
 
-    private String msg;
     private Integer code = GlobalResultEnum.FAIL.getCode();
+    private String msg;
 
     public GlobalException() {
         super(GlobalResultEnum.FAIL.getDesc());
@@ -30,32 +34,16 @@ public class GlobalException extends RuntimeException {
         this.msg = msg;
     }
 
-    public GlobalException(String msg, int code) {
+    public GlobalException(int code, String msg) {
         super(msg);
-        this.msg = msg;
         this.code = code;
+        this.msg = msg;
     }
 
-    public GlobalException(String msg, int code, Throwable e) {
+    public GlobalException(int code, String msg, Throwable e) {
         super(msg, e);
-        this.msg = msg;
         this.code = code;
-    }
-
-    public String getMsg() {
-        return msg;
-    }
-
-    public void setMsg(String msg) {
         this.msg = msg;
-    }
-
-    public Integer getCode() {
-        return code;
-    }
-
-    public void setCode(Integer code) {
-        this.code = code;
     }
     
 }

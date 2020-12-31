@@ -1,9 +1,11 @@
 package com.liuyun.auth.config;
 
+import com.liuyun.auth.config.constants.AuthConstants;
+import com.liuyun.auth.config.properties.AuthSecurityProperties;
 import com.liuyun.auth.service.AuthUserDetailsService;
-import com.liuyun.oauth2.properties.AuthSecurityProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -25,6 +27,7 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 @Slf4j
 @Configuration
 @EnableWebSecurity
+@EnableConfigurationProperties({AuthSecurityProperties.class})
 public class AuthSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
@@ -77,10 +80,10 @@ public class AuthSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(HttpSecurity http) throws Exception {
         http
-                //表单登录,loginPage为登录请求的url,loginProcessingUrl为表单登录处理的URL
                 .formLogin()
-                .loginPage("/auth/login")
-                .loginProcessingUrl("/authentication/form")
+                .loginPage(AuthConstants.LOGIN_URL)
+                // 表单登录处理的URL
+                .loginProcessingUrl(AuthConstants.AUTHENTICATION_URL)
                 //登录成功之后的处理
                 .failureHandler(authenticationFailureHandler)
                 .successHandler(authenticationSuccessHandler)
@@ -91,7 +94,7 @@ public class AuthSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/auth/login", "/authentication/form", "/oauth/authorize")
                 .and()
                 .authorizeRequests()
-                .antMatchers("/auth/login","/authentication/form", "/base-grant").permitAll()
+                .antMatchers("/auth/login","/authentication/form").permitAll()
                 .anyRequest().authenticated()
                 //禁用跨站伪造
                 .and().csrf().disable();

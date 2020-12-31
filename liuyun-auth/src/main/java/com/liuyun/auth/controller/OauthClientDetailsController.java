@@ -9,11 +9,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- *  前端控制器
+ * 前端控制器
  *
  * @author WangDong
  * @since 2020-12-17 15:14:36
-
  */
 @RestController
 @RequestMapping("/oauthClientDetails")

@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.bootstrap.encrypt.KeyProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.common.DefaultOAuth2AccessToken;
 import org.springframework.security.oauth2.provider.token.TokenEnhancer;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
@@ -12,6 +13,7 @@ import org.springframework.security.oauth2.provider.token.store.KeyStoreKeyFacto
 
 import java.security.KeyPair;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * @author wangdong
@@ -62,9 +64,13 @@ public class AuthJwtTokenStore {
     public TokenEnhancer tokenEnhancer() {
         return (accessToken, authentication) -> {
             Map<String, Object> additionalInfo = MapUtil.newHashMap(2);
-            Object credentials = authentication.getUserAuthentication().getCredentials();
-            additionalInfo.put("test", credentials);
-            ((DefaultOAuth2AccessToken) accessToken).setAdditionalInformation(additionalInfo);
+            Authentication userAuthentication = authentication.getUserAuthentication();
+            // 客户端授权, 不包含用户信息
+            if (Objects.nonNull(userAuthentication)) {
+                Object credentials = userAuthentication.getCredentials();
+                additionalInfo.put("test", credentials);
+                ((DefaultOAuth2AccessToken) accessToken).setAdditionalInformation(additionalInfo);
+            }
             return accessToken;
         };
     }

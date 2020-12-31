@@ -1,6 +1,8 @@
 # 应用名称
 server:
   port: 19080
+  servlet:
+    context-path: /liuyun-auth
 
 spring:
   profiles:
@@ -102,12 +104,4 @@ encrypt:
 
 liuyun:
   security:
-    enable: true
-    ignore:
-      httpUrls:
-        - /aa/bb
-        - /bb/aa
-      menusPaths:
-        - /aa/bb
-        - /bb/aa
     onlyFetchByGateway: false

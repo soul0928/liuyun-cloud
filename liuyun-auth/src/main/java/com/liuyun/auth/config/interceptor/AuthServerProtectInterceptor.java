@@ -1,4 +1,4 @@
-package com.liuyun.oauth2.interceptor;
+/*package com.liuyun.auth.config.interceptor;
 
 import cn.hutool.core.util.StrUtil;
 import com.liuyun.core.result.ResponseUtil;
@@ -13,13 +13,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-/**
+*//**
  * 配置是否只能通过网关请求
  *
  * @author wangdong
  * @version 1.0.0
  * @date 2020/12/26 23:46
- **/
+ **//*
 public class AuthServerProtectInterceptor implements HandlerInterceptor {
 
     private final AuthSecurityProperties authSecurityProperties;
@@ -28,7 +28,7 @@ public class AuthServerProtectInterceptor implements HandlerInterceptor {
         this.authSecurityProperties = authSecurityProperties;
     }
 
-    /**
+    *//**
      * 配置是否只能通过网关请求
      *
      * @param request  {@link HttpServletRequest}
@@ -37,7 +37,7 @@ public class AuthServerProtectInterceptor implements HandlerInterceptor {
      * @return boolean
      * @author wangdong
      * @date 2020/12/26 11:50 下午
-     **/
+     **//*
     @Override
     public boolean preHandle(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull Object handler) throws IOException {
         if (!authSecurityProperties.getOnlyFetchByGateway()) {
@@ -53,4 +53,4 @@ public class AuthServerProtectInterceptor implements HandlerInterceptor {
     }
 
 
-}
+}*/

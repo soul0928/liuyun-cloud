@@ -52,8 +52,28 @@
         </dependency>
 
         <dependency>
-            <groupId>com.liuyun.oauth2</groupId>
-            <artifactId>liuyun-auth-client</artifactId>
+            <groupId>com.liuyun.core</groupId>
+            <artifactId>liuyun-core</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.liuyun.utils</groupId>
+            <artifactId>liuyun-utils</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.liuyun.redis</groupId>
+            <artifactId>liuyun-redis</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.liuyun.api</groupId>
+            <artifactId>liuyun-api</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-oauth2</artifactId>
         </dependency>
 
         <dependency>

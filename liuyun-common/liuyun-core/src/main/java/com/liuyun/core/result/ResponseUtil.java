@@ -21,6 +21,7 @@ public class ResponseUtil {
      * @param response response
      * @param result result
      */
+    @SuppressWarnings("all")
     public static void out(HttpServletResponse response, Result result){
 
         ServletOutputStream out = null;
