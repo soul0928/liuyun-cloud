@@ -1,7 +1,7 @@
 package com.liuyun.auth.mapper;
 
+import com.liuyun.database.mybatisplus.mapper.IBaseMapper;
 import com.liuyun.model.auth.entity.OauthClientDetailsEntity;
-import com.liuyun.core.mybatisplus.mapper.IBaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 
 /**

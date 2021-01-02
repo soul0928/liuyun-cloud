@@ -25,8 +25,8 @@
     <dependencies>
 
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-oauth2</artifactId>
         </dependency>
 
         <!-- nacos -->
@@ -39,7 +39,6 @@
             <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
         </dependency>
 
-
         <!-- thymeleaf -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -47,18 +46,8 @@
         </dependency>
 
         <dependency>
-            <groupId>com.liuyun.log</groupId>
-            <artifactId>liuyun-log</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.liuyun.core</groupId>
-            <artifactId>liuyun-core</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.liuyun.utils</groupId>
-            <artifactId>liuyun-utils</artifactId>
+            <groupId>com.liuyun.web</groupId>
+            <artifactId>liuyun-web</artifactId>
         </dependency>
 
         <dependency>
@@ -69,11 +58,6 @@
         <dependency>
             <groupId>com.liuyun.api</groupId>
             <artifactId>liuyun-api</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-oauth2</artifactId>
         </dependency>
 
         <dependency>

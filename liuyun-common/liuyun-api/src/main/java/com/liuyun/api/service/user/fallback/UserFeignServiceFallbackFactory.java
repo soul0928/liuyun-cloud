@@ -1,8 +1,8 @@
 package com.liuyun.api.service.user.fallback;
 
 import com.liuyun.api.service.user.UserFeignService;
-import com.liuyun.core.result.Result;
 import com.liuyun.model.user.vo.SysUserInfoVO;
+import com.liuyun.utils.result.Result;
 import feign.hystrix.FallbackFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

@@ -54,20 +54,33 @@
 <div class="login-container">
     <div class="form-container">
         <p class="title">用户登录</p>
-        <form name="loginForm" method="post" action="/liuyun-auth/authentication/form">
+        <form name="loginForm" method="post" action="/authentication/form">
             <label>
-                <input type="text" name="username" placeholder="用户名"/>
+                <input type="text" name="username" id="username" placeholder="用户名"/>
             </label>
             <br>
             <label>
-                <input type="password" name="password" placeholder="密码"/>
+                <input type="password" name="password" id="password" placeholder="密码"/>
             </label>
             <br>
             <button type="submit" class="btn">登 &nbsp;&nbsp; 录</button>
         </form>
-    </div>
 </div>
 </body>
 <script>
+/*    function login() {
+        const username = window.document.getElementById('username').value;
+        const password = window.document.getElementById('password').value;
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', '/authentication/form', true);
+        xhr.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+        xhr.send('username=' + username +'&password=' + password);
+        /!**
+         * 获取数据后的处理程序
+         *!/
+        xhr.onreadystatechange = function () {
+            alert(xhr.responseText);
+        };
+    }*/
 </script>
 </html>

@@ -16,7 +16,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 
 /**
@@ -36,8 +35,6 @@ public class AuthSecurityConfig extends WebSecurityConfigurerAdapter {
     private AuthUserDetailsService authUserDetailsService;
     @Autowired
     private AuthenticationFailureHandler authenticationFailureHandler;
-    @Autowired
-    private AuthenticationSuccessHandler authenticationSuccessHandler;
 
     /**
      * 装配BCryptPasswordEncoder用户密码的匹配
@@ -86,15 +83,14 @@ public class AuthSecurityConfig extends WebSecurityConfigurerAdapter {
                 .loginProcessingUrl(AuthConstants.AUTHENTICATION_URL)
                 //登录成功之后的处理
                 .failureHandler(authenticationFailureHandler)
-                .successHandler(authenticationSuccessHandler)
-
                 .and()
-                // 必须配置，不然OAuth2的http配置不生效----不明觉厉
                 .requestMatchers()
-                .antMatchers("/auth/login", "/authentication/form", "/oauth/authorize")
+                // http security 要拦截的url，这里这拦截，oauth2相关和登录登录相关的url，其他的交给资源服务处理
+                .antMatchers(AuthConstants.LOGIN_URL, AuthConstants.AUTHENTICATION_URL, AuthConstants.OAUTH_ALL_URL)
                 .and()
                 .authorizeRequests()
-                .antMatchers("/auth/login","/authentication/form").permitAll()
+                // 自定义页面或处理url是，如果不配置全局允许，浏览器会提示服务器将页面转发多次
+                .antMatchers(AuthConstants.LOGIN_URL, AuthConstants.AUTHENTICATION_URL).permitAll()
                 .anyRequest().authenticated()
                 //禁用跨站伪造
                 .and().csrf().disable();

@@ -1,6 +1,6 @@
 package com.liuyun.user.modules.controller;
 
-import com.liuyun.core.mybatisplus.controller.IBaseController;
+import com.liuyun.database.mybatisplus.controller.IBaseController;
 import com.liuyun.model.user.entity.SysUserRoleEntity;
 import com.liuyun.user.modules.service.SysUserRoleService;
 import io.swagger.annotations.Api;

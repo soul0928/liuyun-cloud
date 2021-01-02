@@ -1,7 +1,7 @@
 package com.liuyun.user.modules.mapper;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.liuyun.core.mybatisplus.mapper.IBaseMapper;
+import com.liuyun.database.mybatisplus.mapper.IBaseMapper;
 import com.liuyun.model.user.dto.SysUserPageDTO;
 import com.liuyun.model.user.entity.SysUserEntity;
 import com.liuyun.model.user.vo.SysUserPageVO;

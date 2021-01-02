@@ -1,0 +1,90 @@
+# 应用名称
+server:
+  port: 18080
+
+spring:
+  profiles:
+    active: dev
+  application:
+    name: liuyun-gateway
+  redis:
+    host: 123.57.73.216
+    port: 6379
+    database: 0
+    password: liuyun
+    timeout: 10000
+    lettuce:
+      pool:
+        min-idle: 0
+        max-wait: -1
+        max-active: 8
+        max-idle: 8
+  cloud:
+    nacos:
+      discovery:
+        group: liuyun
+        server-addr: 123.57.73.216:8848
+        namespace: 30dd5d56-8bec-48eb-94dc-5851cc2e16cd
+        service: ${spring.application.name}
+        weight: 1
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+      globalcors:
+        cors-configurations:
+          '[/**]': #匹配所有请求
+            allowedOrigins: "*" #跨域处理 允许所有的域
+            allowedMethods: # 支持的方法
+              - GET
+              - POST
+              - PUT
+              - DELETE
+      routes:
+        - id: liuyun-user
+          uri: lb://liuyun-user
+          predicates:
+            - Path=/user/**
+          filters:
+            - StripPrefix=1
+            # - PrefixPath=/liuyun-user
+            - name: Hystrix
+              args:
+                name: default
+                fallbackUri: forward:/defaultFallback
+
+        - id: liuyun-auth
+          uri: lb://liuyun-auth
+          predicates:
+            - Path=/auth/**
+          filters:
+            - StripPrefix=1
+            - name: Hystrix
+              args:
+                name: default
+                fallbackUri: forward:/defaultFallback
+
+
+# hystrix 信号量隔离，3秒后自动超时
+hystrix:
+  metrics:
+    enabled: true
+  command:
+    default:
+      execution:
+        isolation:
+          strategy: SEMAPHORE
+          thread:
+            timeoutInMilliseconds: 3000
+  shareSecurityContext: true
+
+# 暴露端点
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  endpoint:
+    health:
+      show-details: ALWAYS

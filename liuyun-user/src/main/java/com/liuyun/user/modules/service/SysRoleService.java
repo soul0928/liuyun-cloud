@@ -1,6 +1,6 @@
 package com.liuyun.user.modules.service;
 
-import com.liuyun.core.mybatisplus.service.IBaseService;
+import com.liuyun.database.mybatisplus.service.IBaseService;
 import com.liuyun.model.user.entity.SysRoleEntity;
 
 import java.util.Set;

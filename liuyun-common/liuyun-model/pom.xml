@@ -25,20 +25,12 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.liuyun.utils</groupId>
-            <artifactId>liuyun-utils</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.liuyun.core</groupId>
-            <artifactId>liuyun-core</artifactId>
-        </dependency>
-
-        <dependency>
             <groupId>com.liuyun.swagger2</groupId>
             <artifactId>liuyun-swagger2</artifactId>
         </dependency>
-
-
+        <dependency>
+            <groupId>com.liuyun.database</groupId>
+            <artifactId>liuyun-database</artifactId>
+        </dependency>
     </dependencies>
 </project>

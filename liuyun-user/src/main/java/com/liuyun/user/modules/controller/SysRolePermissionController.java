@@ -1,6 +1,6 @@
 package com.liuyun.user.modules.controller;
 
-import com.liuyun.core.mybatisplus.controller.IBaseController;
+import com.liuyun.database.mybatisplus.controller.IBaseController;
 import com.liuyun.model.user.entity.SysRolePermissionEntity;
 import com.liuyun.user.modules.service.SysRolePermissionService;
 import io.swagger.annotations.Api;
@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/sysRolePermissionEntity")
 @Api(tags = "角色权限关联表服务")
 public class SysRolePermissionController extends IBaseController<SysRolePermissionEntity> {
+
     @Autowired
     private SysRolePermissionService sysRolePermissionService;
 

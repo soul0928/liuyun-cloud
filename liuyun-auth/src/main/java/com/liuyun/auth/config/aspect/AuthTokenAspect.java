@@ -1,6 +1,6 @@
 package com.liuyun.auth.config.aspect;
 
-import com.liuyun.core.result.Result;
+import com.liuyun.utils.result.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;

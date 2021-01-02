@@ -62,7 +62,7 @@
     <h3 th:text="${clientId} + ' 请求授权，该应用将获取你的以下信息'"></h3>
     <p>昵称，头像和性别</p>
     授权后表明你已同意 <a href="/服务协议" style="color: #09bfb2">OAUTH-BOOT 服务协议</a>
-    <form method="post" action="/liuyun-auth/oauth/authorize">
+    <form method="post" action="/oauth/authorize">
         <input type="hidden" name="user_oauth_approval" value="true">
         <div th:each="item:${scopes}">
             <input type="radio" th:name="'scope.'+${item}" value="true" hidden="hidden" checked="checked"/>

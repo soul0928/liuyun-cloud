@@ -1,6 +1,6 @@
 package com.liuyun.auth.controller;
 
-import com.liuyun.core.result.Result;
+import com.liuyun.utils.result.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -28,6 +28,8 @@ public class TestController {
     }
 
     /**
+     * 只用于测试  所有接口权限交由资源服务器处理(gateway网关)
+     *
      * @EnableGlobalMethodSecurity(jsr250Enabled = true, prePostEnabled = true, securedEnabled = true)
      *
      * prePostEnabled = true

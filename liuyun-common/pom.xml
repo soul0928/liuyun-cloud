@@ -19,13 +19,13 @@
     <description>LiuYun Common</description>
 
     <modules>
+        <module>liuyun-database</module>
         <module>liuyun-utils</module>
         <module>liuyun-model</module>
-        <module>liuyun-log</module>
-        <module>liuyun-core</module>
         <module>liuyun-redis</module>
         <module>liuyun-swagger2</module>
         <module>liuyun-api</module>
+        <module>liuyun-web</module>
     </modules>
 
     <properties>

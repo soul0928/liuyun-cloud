@@ -2,14 +2,13 @@ package com.liuyun.auth.service.impl;
 
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.json.JSONUtil;
-import com.liuyun.api.service.user.PermissionFeignService;
 import com.liuyun.api.service.user.RoleFeignService;
 import com.liuyun.api.service.user.UserFeignService;
 import com.liuyun.auth.service.AuthUserDetailsService;
-import com.liuyun.core.global.enums.GlobalResultEnum;
-import com.liuyun.core.result.Result;
 import com.liuyun.model.user.SysUserStatusEnum;
 import com.liuyun.model.user.vo.SysUserInfoVO;
+import com.liuyun.utils.global.enums.GlobalResultEnum;
+import com.liuyun.utils.result.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
@@ -43,9 +42,6 @@ public class AuthUserDetailServiceImpl implements AuthUserDetailsService {
     @Autowired
     private RoleFeignService roleFeignService;
 
-    @Autowired
-    private PermissionFeignService permissionFeignService;
-
     /**
      * 根据用户账号获取用户信息
      *
@@ -69,8 +65,6 @@ public class AuthUserDetailServiceImpl implements AuthUserDetailsService {
         checkUserStatus(userInfoVO);
         List<GrantedAuthority> grantedAuthorities = AuthorityUtils.NO_AUTHORITIES;
         Set<String> roles = getRoles(userInfoVO);
-        Set<String> permissions = getPermissions(userInfoVO);
-        roles.addAll(permissions);
         if (CollectionUtil.isNotEmpty(roles)) {
             grantedAuthorities = AuthorityUtils.createAuthorityList(roles.toArray(new String[0]));
         }
@@ -94,24 +88,6 @@ public class AuthUserDetailServiceImpl implements AuthUserDetailsService {
         }
         Set<String> roles = roleResult.getResult();
         return Optional.ofNullable(roles).orElse(new HashSet<>()).stream().map(i -> ROLE + i).collect(Collectors.toSet());
-    }
-
-    /**
-     * 获取权限信息
-     *
-     * @param userInfoVO {@link SysUserInfoVO}
-     * @return java.util.Set<java.lang.String>
-     * @author wangdong
-     * @date 2020/12/28 12:07 上午
-     **/
-    private Set<String> getPermissions(SysUserInfoVO userInfoVO) {
-        log.info("根据 用户ID 获取用户权限信息, 调用 Feign 接口 userId -> [{}]", userInfoVO.getId());
-        Result<Set<String>> permissionResult = permissionFeignService.getPermissionsByUserId(userInfoVO.getId());
-        log.info("根据 用户ID 获取用户权限信息, 调用 Feign 接口响应参数为 -> [{}]", JSONUtil.toJsonStr(permissionResult));
-        if (!Objects.equals(GlobalResultEnum.SUCCESS.getCode(), permissionResult.getCode())) {
-            throw new InternalAuthenticationServiceException("用户信息不存在!!!");
-        }
-        return permissionResult.getResult();
     }
 
     /**

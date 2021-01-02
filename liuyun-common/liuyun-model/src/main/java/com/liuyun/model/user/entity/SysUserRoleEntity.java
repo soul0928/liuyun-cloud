@@ -1,7 +1,7 @@
 package com.liuyun.model.user.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.liuyun.core.mybatisplus.entity.IBaseEntity;
+import com.liuyun.database.mybatisplus.entity.IBaseEntity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;

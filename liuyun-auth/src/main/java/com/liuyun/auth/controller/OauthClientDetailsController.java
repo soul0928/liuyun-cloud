@@ -1,7 +1,7 @@
 package com.liuyun.auth.controller;
 
 import com.liuyun.auth.service.OauthClientDetailsService;
-import com.liuyun.core.mybatisplus.controller.IBaseController;
+import com.liuyun.database.mybatisplus.controller.IBaseController;
 import com.liuyun.model.auth.entity.OauthClientDetailsEntity;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;

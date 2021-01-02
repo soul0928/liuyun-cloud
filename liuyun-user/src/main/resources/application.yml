@@ -1,8 +1,6 @@
 # 应用名称
 server:
   port: 19010
-  servlet:
-    context-path: /liuyun-user
 
 spring:
   profiles:
@@ -73,7 +71,7 @@ spring:
         enabled: true
 
 mybatis-plus:
-  typeEnumsPackage: com.liuyun.core.mybatisplus.enums
+  typeEnumsPackage: com.liuyun.database.mybatisplus.enums
   mapper-locations: classpath*:mapper/**/*Mapper.xml
   type-aliases-package: com.liuyun.model.user.entity.*
   configuration:

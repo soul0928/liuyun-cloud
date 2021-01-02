@@ -1,7 +1,7 @@
 package com.liuyun.user.modules.service.impl;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.liuyun.core.mybatisplus.service.impl.IBaseServiceImpl;
+import com.liuyun.database.mybatisplus.service.impl.IBaseServiceImpl;
 import com.liuyun.model.user.dto.SysUserPageDTO;
 import com.liuyun.model.user.entity.SysUserEntity;
 import com.liuyun.model.user.vo.SysUserPageVO;

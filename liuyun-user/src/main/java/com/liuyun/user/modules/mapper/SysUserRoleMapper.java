@@ -1,6 +1,6 @@
 package com.liuyun.user.modules.mapper;
 
-import com.liuyun.core.mybatisplus.mapper.IBaseMapper;
+import com.liuyun.database.mybatisplus.mapper.IBaseMapper;
 import com.liuyun.model.user.entity.SysUserRoleEntity;
 import org.apache.ibatis.annotations.Mapper;
 

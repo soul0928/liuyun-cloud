@@ -2,11 +2,11 @@ package com.liuyun.user.modules.controller;
 
 import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
-import com.liuyun.core.mybatisplus.controller.IBaseController;
-import com.liuyun.core.result.Result;
+import com.liuyun.database.mybatisplus.controller.IBaseController;
 import com.liuyun.model.user.entity.SysUserEntity;
 import com.liuyun.model.user.vo.SysUserInfoVO;
 import com.liuyun.user.modules.service.SysUserService;
+import com.liuyun.utils.result.Result;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiParam;

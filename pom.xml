@@ -13,7 +13,7 @@
 
     <modules>
         <module>liuyun-common</module>
-<!--        <module>liuyun-gateway</module>-->
+        <module>liuyun-gateway</module>
         <module>liuyun-user</module>
         <module>liuyun-auth</module>
     </modules>
@@ -71,20 +71,20 @@
             </dependency>
 
             <dependency>
-                <groupId>com.liuyun.core</groupId>
-                <artifactId>liuyun-core</artifactId>
-                <version>${common.version}</version>
-            </dependency>
-
-            <dependency>
                 <groupId>com.liuyun.utils</groupId>
                 <artifactId>liuyun-utils</artifactId>
                 <version>${common.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>com.liuyun.log</groupId>
-                <artifactId>liuyun-log</artifactId>
+                <groupId>com.liuyun.database</groupId>
+                <artifactId>liuyun-database</artifactId>
+                <version>${common.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.liuyun.web</groupId>
+                <artifactId>liuyun-web</artifactId>
                 <version>${common.version}</version>
             </dependency>
 

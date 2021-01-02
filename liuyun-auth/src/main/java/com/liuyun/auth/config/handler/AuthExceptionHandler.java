@@ -1,6 +1,6 @@
 package com.liuyun.auth.config.handler;
 
-import com.liuyun.core.result.Result;
+import com.liuyun.utils.result.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;

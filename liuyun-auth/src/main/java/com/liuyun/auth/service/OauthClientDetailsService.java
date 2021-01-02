@@ -1,7 +1,6 @@
 package com.liuyun.auth.service;
 
-
-import com.liuyun.core.mybatisplus.service.IBaseService;
+import com.liuyun.database.mybatisplus.service.IBaseService;
 import com.liuyun.model.auth.entity.OauthClientDetailsEntity;
 
 /**

@@ -25,8 +25,8 @@
     <dependencies>
 
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
+            <groupId>com.liuyun.web</groupId>
+            <artifactId>liuyun-web</artifactId>
         </dependency>
 
         <!-- nacos -->
@@ -37,16 +37,6 @@
         <dependency>
             <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.liuyun.log</groupId>
-            <artifactId>liuyun-log</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.liuyun.model</groupId>
-            <artifactId>liuyun-model</artifactId>
         </dependency>
 
         <dependency>

@@ -1,8 +1,8 @@
 package com.liuyun.api.service.user;
 
 import com.liuyun.api.service.user.fallback.PermissionFeignServiceFallbackFactory;
-import com.liuyun.core.global.constants.ServiceNameConstants;
-import com.liuyun.core.result.Result;
+import com.liuyun.utils.global.constants.ServiceNameConstants;
+import com.liuyun.utils.result.Result;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,7 +15,7 @@ import java.util.Set;
  * @date 2020/12/28 00:46
  **/
 @FeignClient(value = ServiceNameConstants.LIUYUN_USER,
-        path = "/" + ServiceNameConstants.LIUYUN_USER + "/sysPermission",
+        path = "/sysPermission",
         fallbackFactory = PermissionFeignServiceFallbackFactory.class,
         contextId = "permissionFeignService",
         decode404 = true)

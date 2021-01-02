@@ -1,9 +1,9 @@
 package com.liuyun.user.modules.controller;
 
-import com.liuyun.core.mybatisplus.controller.IBaseController;
-import com.liuyun.core.result.Result;
+import com.liuyun.database.mybatisplus.controller.IBaseController;
 import com.liuyun.model.user.entity.SysPermissionEntity;
 import com.liuyun.user.modules.service.SysPermissionService;
+import com.liuyun.utils.result.Result;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiParam;
@@ -28,6 +28,7 @@ import java.util.Set;
 @RequestMapping("/sysPermission")
 @Api(tags = "基础权限表服务")
 public class SysPermissionController extends IBaseController<SysPermissionEntity> {
+
     @Autowired
     private SysPermissionService sysPermissionService;
 

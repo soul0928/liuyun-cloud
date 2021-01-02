@@ -1,6 +1,6 @@
 package com.liuyun.user.modules.service.impl;
 
-import com.liuyun.core.mybatisplus.service.impl.IBaseServiceImpl;
+import com.liuyun.database.mybatisplus.service.impl.IBaseServiceImpl;
 import com.liuyun.model.user.entity.SysUserRoleEntity;
 import com.liuyun.user.modules.mapper.SysUserRoleMapper;
 import com.liuyun.user.modules.service.SysUserRoleService;

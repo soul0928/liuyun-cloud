@@ -10,6 +10,11 @@ public class AuthConstants {
     /**
      * 跳转登录页面 URL
      */
+    public static final String OAUTH_ALL_URL = "/oauth/**";
+
+    /**
+     * 跳转登录页面 URL
+     */
     public static final String LOGIN_URL = "/auth/login";
 
     /**
