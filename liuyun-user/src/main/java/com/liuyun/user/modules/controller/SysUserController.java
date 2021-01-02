@@ -8,7 +8,7 @@ import com.liuyun.model.user.vo.SysUserInfoVO;
 import com.liuyun.user.modules.service.SysUserService;
 import com.liuyun.utils.result.Result;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -41,7 +41,7 @@ public class SysUserController extends IBaseController<SysUserEntity> {
      * @date 2020/12/14 3:38 下午
      **/
     @GetMapping("/queryUserById/{id}")
-    @ApiModelProperty("根据用户 id 获取用户信息")
+    @ApiOperation(value = "根据用户 id 获取用户信息")
     public Result<SysUserInfoVO> queryUserById(@ApiParam(value = "用户ID", required = true) @PathVariable("id") Long id) {
         SysUserEntity sysUserEntity = this.sysUserService.getById(id);
         if (Objects.isNull(sysUserEntity)) {
@@ -60,7 +60,7 @@ public class SysUserController extends IBaseController<SysUserEntity> {
      * @date 2020/12/14 3:38 下午
      **/
     @GetMapping("/queryUserByUsername/{username}")
-    @ApiModelProperty("根据用户账号获取用户信息")
+    @ApiOperation(value = "根据用户账号获取用户信息")
     public Result<SysUserInfoVO> queryUserByUsername(@ApiParam(value = "用户账号", required = true) @PathVariable("username") String username) {
         SysUserEntity sysUserEntity = new LambdaQueryChainWrapper<>(this.sysUserService.getBaseMapper())
                 .eq(SysUserEntity::getUsername, username)

@@ -5,7 +5,7 @@ import com.liuyun.model.user.entity.SysRoleEntity;
 import com.liuyun.user.modules.service.SysRoleService;
 import com.liuyun.utils.result.Result;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -40,7 +40,7 @@ public class SysRoleController extends IBaseController<SysRoleEntity> {
      * @date 2020/12/25 1:20 下午
      **/
     @GetMapping("/getRolesByUserId/{userId}")
-    @ApiModelProperty("根据 用户ID 获取用户角色信息")
+    @ApiOperation("根据 用户ID 获取用户角色信息")
     public Result<Set<String>> getRolesByUserId(@ApiParam(value = "用户ID", required = true) @PathVariable("userId") Long userId) {
         Set<String> set = this.sysRoleService.getRolesByUserId(userId);
         return Result.success(Optional.ofNullable(set).orElse(new HashSet<>(1)));

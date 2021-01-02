@@ -5,7 +5,7 @@ import com.liuyun.model.user.entity.SysPermissionEntity;
 import com.liuyun.user.modules.service.SysPermissionService;
 import com.liuyun.utils.result.Result;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -41,7 +41,7 @@ public class SysPermissionController extends IBaseController<SysPermissionEntity
      * @date 2020/12/25 1:20 下午
      **/
     @GetMapping("/getPermissionsByUserId/{userId}")
-    @ApiModelProperty("根据 用户ID 获取用户权限信息")
+    @ApiOperation("根据 用户ID 获取用户权限信息")
     public Result<Set<String>> getPermissionsByUserId(@ApiParam(value = "用户ID", required = true) @PathVariable("userId") Long userId) {
         Set<String> set = this.sysPermissionService.getPermissionsByUserId(userId);
         return Result.success(Optional.ofNullable(set).orElse(new HashSet<>(1)));

@@ -103,3 +103,13 @@ encrypt:
 liuyun:
   security:
     onlyFetchByGateway: false
+  swagger:
+    enabled: true
+    title: 认证中心
+    description: 认证中心接口文档
+    version: 1.0
+    base-package: com.liuyun.auth.controller
+    contact:
+      name: WangDong
+      url: http://www.liuyunm.com
+      email: soulw0928@gmail.com

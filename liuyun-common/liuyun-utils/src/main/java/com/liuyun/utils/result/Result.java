@@ -1,6 +1,8 @@
 package com.liuyun.utils.result;
 
 import com.liuyun.utils.global.enums.GlobalResultEnum;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -14,6 +16,7 @@ import java.io.Serializable;
  * @version 1.0.0
  **/
 @Data
+@Api(tags = "统一返回参数")
 public class Result<T> implements Serializable {
 
     private static final long serialVersionUID = -8031438847417769246L;
@@ -23,16 +26,19 @@ public class Result<T> implements Serializable {
     /**
      * 返回代码
      */
+    @ApiModelProperty(value = "状态码", example = "200", required = true)
     private Integer code;
 
     /**
      * 返回处理消息
      */
+    @ApiModelProperty(value = "处理消息", example = "处理成功!!!", required = true)
     private String message;
 
     /**
      * 返回数据对象 data
      */
+    @ApiModelProperty(value = "返回数据对象", example = "object")
     private T result;
 
     public Result() {
