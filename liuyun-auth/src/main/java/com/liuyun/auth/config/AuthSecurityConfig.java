@@ -1,6 +1,5 @@
 package com.liuyun.auth.config;
 
-import com.liuyun.auth.config.constants.AuthConstants;
 import com.liuyun.auth.config.properties.AuthSecurityProperties;
 import com.liuyun.auth.service.AuthUserDetailsService;
 import lombok.extern.slf4j.Slf4j;
@@ -15,7 +14,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 
 
 /**
@@ -30,11 +28,7 @@ import org.springframework.security.web.authentication.AuthenticationFailureHand
 public class AuthSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    private AuthSecurityProperties authSecurityProperties;
-    @Autowired
     private AuthUserDetailsService authUserDetailsService;
-    @Autowired
-    private AuthenticationFailureHandler authenticationFailureHandler;
 
     /**
      * 装配BCryptPasswordEncoder用户密码的匹配
@@ -77,22 +71,12 @@ public class AuthSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(HttpSecurity http) throws Exception {
         http
-                .formLogin()
-                .loginPage(AuthConstants.LOGIN_URL)
-                // 表单登录处理的URL
-                .loginProcessingUrl(AuthConstants.AUTHENTICATION_URL)
-                //登录成功之后的处理
-                .failureHandler(authenticationFailureHandler)
-                .and()
-                .requestMatchers()
-                // http security 要拦截的url，这里这拦截，oauth2相关和登录登录相关的url，其他的交给资源服务处理
-                .antMatchers(AuthConstants.LOGIN_URL, AuthConstants.AUTHENTICATION_URL, AuthConstants.OAUTH_ALL_URL)
+                .formLogin().permitAll()
                 .and()
                 .authorizeRequests()
-                // 自定义页面或处理url是，如果不配置全局允许，浏览器会提示服务器将页面转发多次
-                .antMatchers(AuthConstants.LOGIN_URL, AuthConstants.AUTHENTICATION_URL).permitAll()
+                .antMatchers("/keypair/getPublicKey").permitAll()
                 .anyRequest().authenticated()
-                //禁用跨站伪造
-                .and().csrf().disable();
+                .and()
+                .csrf().disable();
     }
 }

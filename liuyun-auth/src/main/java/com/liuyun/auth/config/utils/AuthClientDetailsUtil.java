@@ -1,9 +1,9 @@
 package com.liuyun.auth.config.utils;
 
-import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import com.google.common.collect.Sets;
 import com.liuyun.model.auth.entity.OauthClientDetailsEntity;
+import com.liuyun.utils.lang.StringUtils;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.provider.ClientDetails;
@@ -35,7 +35,7 @@ public class AuthClientDetailsUtil {
             }
             @Override
             public Set<String> getResourceIds() {
-                if (StrUtil.isNotEmpty(entity.getResourceIds())) {
+                if (StringUtils.isNotEmpty(entity.getResourceIds())) {
                     String[] resourceIds = entity.getResourceIds().split(",");
                     return Sets.newHashSet(resourceIds);
                 }
@@ -43,7 +43,7 @@ public class AuthClientDetailsUtil {
             }
             @Override
             public boolean isSecretRequired() {
-                return StrUtil.isNotEmpty(entity.getClientSecret());
+                return StringUtils.isNotEmpty(entity.getClientSecret());
             }
 
             @Override
@@ -53,11 +53,11 @@ public class AuthClientDetailsUtil {
 
             @Override
             public boolean isScoped() {
-                return StrUtil.isNotEmpty(entity.getScope());
+                return StringUtils.isNotEmpty(entity.getScope());
             }
             @Override
             public Set<String> getScope() {
-                if (StrUtil.isNotEmpty(entity.getScope())) {
+                if (StringUtils.isNotEmpty(entity.getScope())) {
                     String[] scope = entity.getScope().split(",");
                     return Sets.newHashSet(scope);
                 }
@@ -65,7 +65,7 @@ public class AuthClientDetailsUtil {
             }
             @Override
             public Set<String> getAuthorizedGrantTypes() {
-                if (StrUtil.isNotEmpty(entity.getAuthorizedGrantTypes())) {
+                if (StringUtils.isNotEmpty(entity.getAuthorizedGrantTypes())) {
                     String[] authorizedGrantTypes = entity.getAuthorizedGrantTypes().split(",");
                     return Sets.newHashSet(authorizedGrantTypes);
                 }
@@ -78,7 +78,7 @@ public class AuthClientDetailsUtil {
             }
             @Override
             public Collection<GrantedAuthority> getAuthorities() {
-                if (StrUtil.isNotEmpty(entity.getAuthorities())) {
+                if (StringUtils.isNotEmpty(entity.getAuthorities())) {
                     List<GrantedAuthority> list = new ArrayList<>();
                     String[] split = entity.getAuthorities().split(",");
                     for (String s : split) {

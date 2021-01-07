@@ -1,5 +1,6 @@
 package com.liuyun.auth.config.aspect;
 
+import com.liuyun.utils.global.enums.GlobalResultEnum;
 import com.liuyun.utils.result.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -35,7 +36,7 @@ public class AuthTokenAspect {
                 result = Result.success(body);
             } else {
                 log.error("error:{}", responseEntity.getStatusCode().toString());
-                result = Result.fail("登录失败!!!");
+                result = Result.fail(GlobalResultEnum.USER_ERROR);
             }
         }
         return ResponseEntity

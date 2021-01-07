@@ -1,8 +1,8 @@
 package com.liuyun.gateway.config.swagger2;
 
 import com.liuyun.utils.global.enums.GlobalServiceEnum;
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.gateway.config.GatewayProperties;
 import org.springframework.cloud.gateway.route.RouteLocator;
 import org.springframework.cloud.gateway.support.NameUtils;
@@ -22,12 +22,12 @@ import java.util.List;
 @Slf4j
 @Component
 @Primary
-@AllArgsConstructor
 public class SwaggerResourceConfig implements SwaggerResourcesProvider {
 
-
-    private final RouteLocator routeLocator;
-    private final GatewayProperties gatewayProperties;
+    @Autowired
+    private RouteLocator routeLocator;
+    @Autowired
+    private GatewayProperties gatewayProperties;
 
     @Override
     public List<SwaggerResource> get() {

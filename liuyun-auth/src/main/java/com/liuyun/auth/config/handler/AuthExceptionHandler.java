@@ -1,9 +1,8 @@
 package com.liuyun.auth.config.handler;
 
+import com.liuyun.auth.config.exception.AuthOauth2Exception;
 import com.liuyun.utils.result.Result;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -16,14 +15,10 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class AuthExceptionHandler {
 
-    /**
-     * AccessDeniedException异常处理返回json
-     * 返回状态码:403
-     */
-    @ExceptionHandler({AccessDeniedException.class})
-    public Result<String> badMethodExpressException(AccessDeniedException e) {
-        log.error(e.getMessage(), e);
-        return Result.fail(HttpStatus.FORBIDDEN.value(), "没有权限访问该资源!!!");
+    @ExceptionHandler({AuthOauth2Exception.class})
+    public Result<String> authOauth2Exception(AuthOauth2Exception e) {
+        log.info(e.getMessage(), e);
+        return Result.fail(e.getCode(), e.getMessage());
     }
 
 }

@@ -35,7 +35,6 @@ public class AuthSecurityProperties {
          * 监控中心和swagger需要访问的url
          */
         private static final String[] ENDPOINTS = {
-                "/oauth/**",
                 "/actuator/**",
                 "/*/v2/api-docs",
                 "/swagger/api-docs",

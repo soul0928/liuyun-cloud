@@ -21,7 +21,7 @@ public class DefaultHystrixController {
 
     @RequestMapping("/defaultFallback")
     public Result<Object> defaultFallback(){
-        return Result.fail(GlobalResultEnum.FAIL.getCode(), HYSTRIX_MSG);
+        return Result.fail(GlobalResultEnum.SYSTEM_EXECUTION_TIMEOUT.getCode(), HYSTRIX_MSG);
     }
 
 }

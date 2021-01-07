@@ -7,11 +7,17 @@ spring:
     active: dev
   application:
     name: liuyun-gateway
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          # 获取JWT验签公钥请求路径
+          jwk-set-uri: 'http://localhost:19080/keypair/getPublicKey'
   redis:
-    host: 123.57.73.216
+    host: liuyun0528.redis.rds.aliyuncs.com
     port: 6379
     database: 0
-    password: liuyun
+    password: liuyun:liuyun@0528
     timeout: 10000
     lettuce:
       pool:
@@ -88,3 +94,11 @@ management:
   endpoint:
     health:
       show-details: ALWAYS
+
+liuyun:
+  security:
+    ignore:
+      authenticate_urls:
+        - /aa/bb
+      authentication_urls:
+        - /cc/dd

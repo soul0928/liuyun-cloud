@@ -1,15 +1,14 @@
 package com.liuyun.web.exception;
 
+import com.liuyun.utils.global.enums.GlobalResultEnum;
 import com.liuyun.utils.global.exception.GlobalException;
 import com.liuyun.utils.result.Result;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.validation.ObjectError;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.multipart.MaxUploadSizeExceededException;
-import org.springframework.web.servlet.NoHandlerFoundException;
 
 import java.util.List;
 
@@ -34,10 +33,13 @@ public class GlobalExceptionHandler {
         return Result.fail(e.getCode(), e.getMessage());
     }
 
+    /**
+     * Valid 参数校验异常拦截
+     */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public Result<String> methodArgumentNotValidException(MethodArgumentNotValidException e) {
         log.error(e.getMessage(), e);
-        return Result.fail(getError(e.getBindingResult().getAllErrors()));
+        return Result.fail(GlobalResultEnum.USER_REQUEST_PARAM_ERROR.getCode(), getError(e.getBindingResult().getAllErrors()));
     }
 
     private String getError(List<ObjectError> allErrors) {
@@ -49,22 +51,10 @@ public class GlobalExceptionHandler {
         return message.substring(0, message.length() - 3);
     }
 
-    @ExceptionHandler(MaxUploadSizeExceededException.class)
-    public Result<String> maxUploadSizeExceededException(MaxUploadSizeExceededException e) {
+    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+    public Result<String> httpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException e) {
         log.error(e.getMessage(), e);
-        return Result.fail(HttpStatus.BAD_REQUEST.value(), e.getMessage());
-    }
-
-    @ExceptionHandler(NoHandlerFoundException.class)
-    public Result<String> handlerNoFoundException(Exception e) {
-        log.error(e.getMessage(), e);
-        return Result.fail(HttpStatus.BAD_REQUEST.value(), "路径不存在，请检查路径是否正确");
-    }
-
-    @ExceptionHandler(IllegalArgumentException.class)
-    public Result<String> handleIllegalArgumentException(IllegalArgumentException e) {
-        log.error(e.getMessage(), e);
-        return Result.fail(e.getMessage());
+        return Result.fail(GlobalResultEnum.USER_ERROR.getCode(), "不支持该请求方法");
     }
 
     @ExceptionHandler(Exception.class)

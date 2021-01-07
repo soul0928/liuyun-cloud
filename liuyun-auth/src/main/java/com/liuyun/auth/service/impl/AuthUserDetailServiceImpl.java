@@ -4,8 +4,9 @@ import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.json.JSONUtil;
 import com.liuyun.api.service.user.RoleFeignService;
 import com.liuyun.api.service.user.UserFeignService;
+import com.liuyun.auth.config.exception.AuthOauth2Exception;
 import com.liuyun.auth.service.AuthUserDetailsService;
-import com.liuyun.model.user.SysUserStatusEnum;
+import com.liuyun.model.user.enums.SysUserStatusEnum;
 import com.liuyun.model.user.vo.SysUserInfoVO;
 import com.liuyun.utils.global.enums.GlobalResultEnum;
 import com.liuyun.utils.result.Result;
@@ -20,7 +21,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * @author wangdong
@@ -31,7 +31,7 @@ import java.util.stream.Collectors;
 @Component
 public class AuthUserDetailServiceImpl implements AuthUserDetailsService {
 
-    private static final String ROLE = "ROLE_";
+   //  private static final String ROLE = "ROLE_";
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -56,11 +56,11 @@ public class AuthUserDetailServiceImpl implements AuthUserDetailsService {
         Result<SysUserInfoVO> userResult = userFeignService.queryUserByUsername(username);
         log.info("根据用户账号获取用户信息, 调用 Feign 接口响应参数为 -> [{}]", JSONUtil.toJsonStr(userResult));
         if (!Objects.equals(GlobalResultEnum.SUCCESS.getCode(), userResult.getCode())) {
-            throw new InternalAuthenticationServiceException("用户信息不存在!!!");
+            throw new AuthOauth2Exception(GlobalResultEnum.USER_NOT_EXIST);
         }
         SysUserInfoVO userInfoVO = userResult.getResult();
         if (Objects.isNull(userInfoVO)) {
-            throw new InternalAuthenticationServiceException("用户信息不存在!!!");
+            throw new AuthOauth2Exception(GlobalResultEnum.USER_NOT_EXIST);
         }
         checkUserStatus(userInfoVO);
         List<GrantedAuthority> grantedAuthorities = AuthorityUtils.NO_AUTHORITIES;
@@ -87,7 +87,8 @@ public class AuthUserDetailServiceImpl implements AuthUserDetailsService {
             throw new InternalAuthenticationServiceException("用户信息不存在!!!");
         }
         Set<String> roles = roleResult.getResult();
-        return Optional.ofNullable(roles).orElse(new HashSet<>()).stream().map(i -> ROLE + i).collect(Collectors.toSet());
+        return Optional.ofNullable(roles).orElse(new HashSet<>());
+        // return Optional.ofNullable(roles).orElse(new HashSet<>()).stream().map(i -> ROLE + i).collect(Collectors.toSet());
     }
 
     /**

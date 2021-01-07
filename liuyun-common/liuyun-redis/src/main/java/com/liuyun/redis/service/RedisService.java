@@ -6,6 +6,7 @@ import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.*;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -99,6 +100,17 @@ public class RedisService {
         opsForValue().set(key, value, time, timeUnit);
     }
 
+    /**
+     * hash hasKey
+     *
+     * @param key     {@link String} key
+     * @param hashKey {@link String} hashKey
+     * @author wangdong
+     * @date 2020/12/15 4:51 下午
+     **/
+    public Boolean hExists(String key, String hashKey) {
+        return opsForHash().hasKey(key, hashKey);
+    }
 
     /**
      * hash get
@@ -110,6 +122,18 @@ public class RedisService {
      **/
     public Object hGet(String key, String hashKey) {
         return opsForHash().get(key, hashKey);
+    }
+
+    /**
+     * hash multiGet
+     *
+     * @param key     {@link String} key
+     * @param hashKey {@link List} hashKey
+     * @author wangdong
+     * @date 2020/12/15 4:51 下午
+     **/
+    public Object hMultiGet(String key, List<String> hashKey) {
+        return opsForHash().multiGet(key, hashKey);
     }
 
     /**
@@ -144,7 +168,7 @@ public class RedisService {
      * @author wangdong
      * @date 2020/12/15 4:51 下午
      **/
-    public void hSetAll(String key, Map<String, Object> value) {
+    public void hSetAll(String key, Map<String, ?> value) {
         opsForHash().putAll(key, value);
     }
 

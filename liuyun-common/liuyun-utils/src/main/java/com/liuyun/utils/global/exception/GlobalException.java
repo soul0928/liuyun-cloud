@@ -15,31 +15,34 @@ public class GlobalException extends RuntimeException {
 
     private static final long serialVersionUID = 1L;
 
-    private Integer code = GlobalResultEnum.FAIL.getCode();
+    private String code;
     private String msg;
 
     public GlobalException() {
-        super(GlobalResultEnum.FAIL.getDesc());
-        this.msg = GlobalResultEnum.FAIL.getDesc();
+        super(GlobalResultEnum.SYSTEM_EXECUTION_ERROR.getDesc());
+        this.code = GlobalResultEnum.SYSTEM_EXECUTION_ERROR.getCode();
+        this.msg = GlobalResultEnum.SYSTEM_EXECUTION_ERROR.getDesc();
     }
 
     public GlobalException(String msg) {
         super(msg);
+        this.code = GlobalResultEnum.SYSTEM_EXECUTION_ERROR.getCode();
         this.msg = msg;
     }
 
     public GlobalException(String msg, Throwable e) {
         super(msg, e);
+        this.code = GlobalResultEnum.SYSTEM_EXECUTION_ERROR.getCode();
         this.msg = msg;
     }
 
-    public GlobalException(int code, String msg) {
+    public GlobalException(String code, String msg) {
         super(msg);
         this.code = code;
         this.msg = msg;
     }
 
-    public GlobalException(int code, String msg, Throwable e) {
+    public GlobalException(String code, String msg, Throwable e) {
         super(msg, e);
         this.code = code;
         this.msg = msg;

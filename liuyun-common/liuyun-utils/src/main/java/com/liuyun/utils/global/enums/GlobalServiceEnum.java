@@ -1,6 +1,6 @@
 package com.liuyun.utils.global.enums;
 
-import cn.hutool.core.util.StrUtil;
+import com.liuyun.utils.lang.StringUtils;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -34,7 +34,7 @@ public enum GlobalServiceEnum {
     private final String desc;
 
     public static String getDesc(String code) {
-        if (StrUtil.isBlank(code)) {
+        if (StringUtils.isBlank(code)) {
             return null;
         }
         for (GlobalServiceEnum value : GlobalServiceEnum.values()) {

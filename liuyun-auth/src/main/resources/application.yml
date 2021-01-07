@@ -7,11 +7,6 @@ spring:
     active: dev
   application:
     name: liuyun-auth
-  thymeleaf:
-    enabled: true
-    cache: false
-    suffix: .html
-    prefix: classpath:/templates/
   cloud:
     nacos:
       discovery:
@@ -21,10 +16,10 @@ spring:
         service: ${spring.application.name}
         weight: 1
   redis:
-    host: 123.57.73.216
+    host: liuyun0528.redis.rds.aliyuncs.com
     port: 6379
     database: 0
-    password: liuyun
+    password: liuyun:liuyun@0528
     timeout: 10000
     lettuce:
       pool:
@@ -35,9 +30,9 @@ spring:
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://123.57.73.216:3306/liu_yun?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=UTC&allowMultiQueries=true
-    username: root
-    password: root@0928
+    url: jdbc:mysql://rm-2ze6k88t0cvtnvyt23o.mysql.rds.aliyuncs.com:3306/liuyun?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=UTC&allowMultiQueries=true
+    username: liuyun
+    password: liuyun@0528
     druid:
       # 初始化大小，最小，最大
       initial-size: 5

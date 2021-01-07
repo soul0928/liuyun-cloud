@@ -1,15 +1,11 @@
 package com.liuyun.auth.config;
-
 import com.google.common.collect.Lists;
-import com.liuyun.auth.config.constants.AuthConstants;
-import com.liuyun.auth.config.handler.AuthWebResponseExceptionTranslator;
 import com.liuyun.auth.service.AuthClientDetailsService;
 import com.liuyun.auth.service.AuthRedisCodeService;
 import com.liuyun.auth.service.AuthUserDetailsService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
@@ -18,6 +14,7 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Aut
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.token.TokenEnhancer;
 import org.springframework.security.oauth2.provider.token.TokenEnhancerChain;
+import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 
 import java.util.List;
@@ -35,6 +32,8 @@ import java.util.List;
 public class AuthAuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
 
     @Autowired
+    private TokenStore tokenStore;
+    @Autowired
     private TokenEnhancer tokenEnhancer;
     @Autowired
     private JwtAccessTokenConverter jwtAccessTokenConverter;
@@ -46,8 +45,6 @@ public class AuthAuthorizationServerConfig extends AuthorizationServerConfigurer
     private AuthUserDetailsService authUserDetailsService;
     @Autowired
     private AuthClientDetailsService authClientDetailsService;
-    @Autowired
-    private AuthWebResponseExceptionTranslator authWebResponseExceptionTranslator;
 
 
     /**
@@ -58,7 +55,6 @@ public class AuthAuthorizationServerConfig extends AuthorizationServerConfigurer
      * @date 2020/12/17 3:20 下午
      **/
     @Override
-    @SuppressWarnings("unchecked")
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) {
         TokenEnhancerChain tokenEnhancerChain = new TokenEnhancerChain();
         List<TokenEnhancer> tokenEnhancers = Lists.newArrayListWithCapacity(2);
@@ -68,19 +64,19 @@ public class AuthAuthorizationServerConfig extends AuthorizationServerConfigurer
 
         endpoints
                 .authenticationManager(authenticationManager)
-                // .tokenStore(tokenStore)
+                .tokenStore(tokenStore)
                 .tokenEnhancer(tokenEnhancerChain)
                 .accessTokenConverter(jwtAccessTokenConverter)
                 .userDetailsService(authUserDetailsService)
                 .authorizationCodeServices(authRedisCodeService)
-                .exceptionTranslator(authWebResponseExceptionTranslator)
+                // .exceptionTranslator(authWebResponseExceptionTranslator)
                 // refresh_token有两种使用方式：重复使用(true)、非重复使用(false)，默认为true
                 //      1.重复使用：access_token过期刷新时， refresh token过期时间未改变，仍以初次生成的时间为准
                 //      2.非重复使用：access_token过期刷新时， refresh_token过期时间延续，在refresh_token有效期内刷新而无需失效再次登录
-                .reuseRefreshTokens(true)
-                .allowedTokenEndpointRequestMethods(HttpMethod.GET, HttpMethod.POST)
+                .reuseRefreshTokens(false);
+                //.allowedTokenEndpointRequestMethods(HttpMethod.GET, HttpMethod.POST);
                 // 替换原来授权页面
-                .pathMapping("/oauth/confirm_access", AuthConstants.CONFIRM_ACCESS_URL);
+                //.pathMapping("/oauth/confirm_access", AuthConstants.CONFIRM_ACCESS_URL);
     }
 
     /**
@@ -106,9 +102,11 @@ public class AuthAuthorizationServerConfig extends AuthorizationServerConfigurer
      **/
     @Override
     public void configure(AuthorizationServerSecurityConfigurer security) {
+        // 默认为 denyAll() 全部禁用
         security.tokenKeyAccess("permitAll()")
-                .checkTokenAccess("isAuthenticated()")
-                .allowFormAuthenticationForClients();
+                .checkTokenAccess("isAuthenticated()");
+                // 此处禁用 启用请求头 Authorization Basic 传参
+                // 是否启用 form 表单提交 client_id client_secret
+                //.allowFormAuthenticationForClients();
     }
-
 }

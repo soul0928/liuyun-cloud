@@ -203,7 +203,7 @@ public class RedisConfig extends CachingConfigurerSupport {
     public RedissonClient redissonClient() {
         Config config = new Config();
         config.useSingleServer()
-                .setAddress("redis://123.57.73.216:6379")
+                .setAddress("redis://" + redisProperties.getHost() + ":" + redisProperties.getPort())
                 .setPassword(redisProperties.getPassword());
                 //.setDatabase(redisProperties.getDatabase())
                 //.setTimeout(Math.toIntExact(redisProperties.getTimeout().getSeconds()))

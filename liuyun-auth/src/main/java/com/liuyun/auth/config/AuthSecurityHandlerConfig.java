@@ -1,12 +1,11 @@
 package com.liuyun.auth.config;
 
+import com.liuyun.utils.global.enums.GlobalResultEnum;
 import com.liuyun.utils.result.ResponseUtil;
 import com.liuyun.utils.result.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpStatus;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 
 /**
@@ -28,15 +27,7 @@ public class AuthSecurityHandlerConfig {
      **/
     @Bean
     public AuthenticationFailureHandler authenticationFailureHandler() {
-        return (request, response, e) -> {
-            String errorMsg;
-            if (e instanceof BadCredentialsException) {
-                errorMsg = "账号或密码错误!!!";
-            } else {
-                errorMsg = e.getMessage();
-            }
-            ResponseUtil.out(response, Result.fail(HttpStatus.UNAUTHORIZED.value(), errorMsg));
-        };
+        return (request, response, e) -> ResponseUtil.out(response, Result.fail(GlobalResultEnum.USERNAME_OR_PASSWORD_ERROR));
     }
 
 }

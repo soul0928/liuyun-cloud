@@ -29,8 +29,8 @@ public abstract class IBaseEntity<T> implements Serializable {
     /**
      * 删除标记（0：正常；1：删除；）
      */
-    public static final Integer DEL_FLAG_NORMAL = 0;
-    public static final Integer DEL_FLAG_DELETE = 1;
+    public static final DelFlagEnum DEL_FLAG_NORMAL = DelFlagEnum.NOT_DELETED;
+    public static final DelFlagEnum DEL_FLAG_DELETE = DelFlagEnum.DELETED;
 
 
     /**
