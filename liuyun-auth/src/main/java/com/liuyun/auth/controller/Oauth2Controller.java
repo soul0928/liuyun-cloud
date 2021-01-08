@@ -51,6 +51,8 @@ import java.util.Set;
 public class Oauth2Controller {
 
     @Resource
+    private TokenEndpoint tokenEndpoint;
+    @Resource
     private TokenStore tokenStore;
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -60,9 +62,6 @@ public class Oauth2Controller {
     private AuthClientDetailsService authClientDetailsService;
     @Resource
     private AuthorizationServerTokenServices authorizationServerTokenServices;
-    @Autowired
-    private TokenEndpoint tokenEndpoint;
-
 
     /**
      * 重写 TokenEndpoint postAccessToken
@@ -106,6 +105,15 @@ public class Oauth2Controller {
         return Result.success(auth2AccessToken);
     }
 
+    /**
+     * 授权码模式认证
+     *
+     * @param clientDetails {@link ClientDetails} 客户端信息
+     * @param vo            {@link AuthLoginReqVO} 认证请求参数
+     * @return org.springframework.security.oauth2.common.OAuth2AccessToken
+     * @author wangdong
+     * @date 2021/1/8 2:30 下午
+     **/
     private OAuth2AccessToken authorizationCode(ClientDetails clientDetails, AuthLoginReqVO vo) {
         try {
             TokenRequest tokenRequest = new TokenRequest(null, clientDetails.getClientId(), clientDetails.getScope(), vo.getGrantType());
@@ -123,22 +131,30 @@ public class Oauth2Controller {
                 throw new AuthOauth2Exception(GlobalResultEnum.USER_REQUEST_PARAM_ERROR.getCode(), "redirect_uri 错误");
             }
             OAuth2Authentication oauth2Authentication = this.createOauth2Authentication(oAuth2Request, userAuthentication);
-            OAuth2AccessToken auth2AccessToken = authorizationServerTokenServices.createAccessToken(oauth2Authentication);
             oauth2Authentication.setAuthenticated(true);
-            return auth2AccessToken;
+            return authorizationServerTokenServices.createAccessToken(oauth2Authentication);
         } catch (Exception e) {
             // 用户密码认证失败
             throw new AuthOauth2Exception(GlobalResultEnum.USER_REQUEST_PARAM_ERROR.getCode(), e.getMessage());
         }
     }
 
+    /**
+     * 客户端模式认证
+     *
+     * @param clientDetails {@link ClientDetails} 客户端信息
+     * @param vo            {@link AuthLoginReqVO} 认证请求参数
+     * @return org.springframework.security.oauth2.common.OAuth2AccessToken
+     * @author wangdong
+     * @date 2021/1/8 2:26 下午
+     **/
     private OAuth2AccessToken clientCredentials(ClientDetails clientDetails, AuthLoginReqVO vo) {
         try {
             TokenRequest tokenRequest = new TokenRequest(null, clientDetails.getClientId(), clientDetails.getScope(), vo.getGrantType());
             OAuth2Request oAuth2Request = tokenRequest.createOAuth2Request(clientDetails);
             OAuth2Authentication oauth2Authentication = this.createOauth2Authentication(oAuth2Request, null);
-            OAuth2AccessToken accessToken = authorizationServerTokenServices.createAccessToken(oauth2Authentication);
             oauth2Authentication.setAuthenticated(true);
+            OAuth2AccessToken accessToken = authorizationServerTokenServices.createAccessToken(oauth2Authentication);
             DefaultOAuth2AccessToken noRefresh = new DefaultOAuth2AccessToken(accessToken);
             noRefresh.setRefreshToken(null);
             return noRefresh;
@@ -175,7 +191,15 @@ public class Oauth2Controller {
         return null;
     }
 
-
+    /**
+     * 密码模式认证
+     *
+     * @param clientDetails {@link ClientDetails} 客户端信息
+     * @param vo            {@link AuthLoginReqVO} 认证请求参数
+     * @return org.springframework.security.oauth2.common.OAuth2AccessToken
+     * @author wangdong
+     * @date 2021/1/8 2:28 下午
+     **/
     private OAuth2AccessToken loginByUsernamePassword(ClientDetails clientDetails, AuthLoginReqVO vo) {
         if (StringUtils.isBlank(vo.getUsername())) {
             throw new AuthOauth2Exception(GlobalResultEnum.USER_REQUEST_PARAM_IS_BLANK.getCode(), "请求登录账号不能空");
@@ -192,9 +216,8 @@ public class Oauth2Controller {
             // Session
             // SecurityContextHolder.getContext().setAuthentication(authentication);
             OAuth2Authentication oAuth2Authentication = this.createOauth2Authentication(oAuth2Request, authentication);
-            OAuth2AccessToken auth2AccessToken = authorizationServerTokenServices.createAccessToken(oAuth2Authentication);
             oAuth2Authentication.setAuthenticated(true);
-            return auth2AccessToken;
+            return authorizationServerTokenServices.createAccessToken(oAuth2Authentication);
         } catch (BadCredentialsException be) {
             // 用户密码认证失败
             throw new AuthOauth2Exception(GlobalResultEnum.USERNAME_OR_PASSWORD_ERROR);
@@ -204,9 +227,13 @@ public class Oauth2Controller {
     }
 
     /**
-     * @param principal the currently authentication principal
-     * @return a client id if there is one in the principal
-     */
+     * 获取经过 Basic 认证后的 clientId
+     *
+     * @param principal {@link Principal} client 认证信息
+     * @return org.springframework.security.oauth2.common.OAuth2AccessToken
+     * @author wangdong
+     * @date 2021/1/8 2:26 下午
+     **/
     protected String getClientId(Principal principal) {
         if (!(principal instanceof Authentication)) {
             throw new AuthOauth2Exception(GlobalResultEnum.CLIENT_AUTHENTICATION_FAILED.getCode(), "客户端未通过身份验证");
