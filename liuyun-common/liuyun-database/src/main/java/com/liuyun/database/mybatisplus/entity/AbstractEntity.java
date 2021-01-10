@@ -22,7 +22,7 @@ import java.time.LocalDateTime;
 @EqualsAndHashCode
 @AllArgsConstructor
 @NoArgsConstructor
-public abstract class IBaseEntity<T> implements Serializable {
+public abstract class AbstractEntity<T> implements Serializable {
 
     private static final long serialVersionUID = -2133014277294316920L;
 
