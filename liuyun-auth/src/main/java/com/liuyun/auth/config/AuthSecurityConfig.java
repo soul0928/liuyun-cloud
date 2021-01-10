@@ -74,7 +74,7 @@ public class AuthSecurityConfig extends WebSecurityConfigurerAdapter {
                 .formLogin().permitAll()
                 .and()
                 .authorizeRequests()
-                .antMatchers("/keypair/getPublicKey").permitAll()
+                .antMatchers("/keypair/getPublicKey", "/v2/api-docs", "/actuator/**", "/oauth/captcha/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .csrf().disable();

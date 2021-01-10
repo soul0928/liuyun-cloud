@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 /**
  * ResponseUtil
@@ -23,16 +24,15 @@ public class ResponseUtil {
      */
     @SuppressWarnings("all")
     public static void out(HttpServletResponse response, Result result){
-
         ServletOutputStream out = null;
         try {
             response.setCharacterEncoding("UTF-8");
             response.setContentType("application/json;charset=UTF-8");
             out = response.getOutputStream();
             out.write(JSONUtil.toJsonStr(result).getBytes());
-            out.flush();
-        } catch (Exception e) {
-            log.error(e + "输出JSON出错");
+            IoUtil.flush(out);
+        } catch (IOException e) {
+            log.error("响应参数异常", e);
         } finally{
             IoUtil.close(out);
         }

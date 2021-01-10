@@ -15,7 +15,7 @@ import java.util.List;
  **/
 @Data
 @RefreshScope
-@ConfigurationProperties(prefix = "liuyun.security")
+@ConfigurationProperties(prefix = "liuyun.security.*")
 public class AuthSecurityProperties {
 
     /**

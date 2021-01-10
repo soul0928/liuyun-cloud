@@ -16,7 +16,7 @@ import lombok.Data;
 public class AuthLoginReqVO {
 
     @ApiModelProperty(value = "授权类型", example = "password", required = true)
-    private String grantType;
+    private String grant_type;
 
     @ApiModelProperty(value = "登录账号", example = "admin")
     private String username;

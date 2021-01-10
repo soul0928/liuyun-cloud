@@ -30,8 +30,8 @@
         </dependency>
 
         <dependency>
-            <groupId>com.liuyun.model</groupId>
-            <artifactId>liuyun-model</artifactId>
+            <groupId>com.liuyun.api</groupId>
+            <artifactId>liuyun-api</artifactId>
         </dependency>
 
     </dependencies>

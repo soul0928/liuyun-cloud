@@ -11,10 +11,16 @@ spring:
     nacos:
       discovery:
         group: liuyun
-        server-addr: 123.57.73.216:8851
+        server-addr: 123.57.73.216:8848
         namespace: 30dd5d56-8bec-48eb-94dc-5851cc2e16cd
         service: ${spring.application.name}
         weight: 1
+    sentinel:
+      enabled: true
+      log:
+        dir: ./logs/sentinel/${spring.application.name}
+      transport:
+        dashboard: 123.57.73.216:8852
   redis:
     host: liuyun0528.redis.rds.aliyuncs.com
     port: 6379
@@ -87,6 +93,21 @@ mybatis-plus:
       logic-not-delete-value: 0 # 逻辑未删除值(默认为 0)
       id-type: assign_id
 
+feign:
+  sentinel:
+    enabled: true
+
+
+# 暴露端点
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  endpoint:
+    health:
+      show-details: ALWAYS
+
 encrypt:
   key-store:
     location: classpath:liuyun.jks
@@ -97,7 +118,7 @@ encrypt:
 
 liuyun:
   security:
-    onlyFetchByGateway: false
+    onlyFetchByGateway: true
   swagger:
     enabled: true
     title: 认证中心

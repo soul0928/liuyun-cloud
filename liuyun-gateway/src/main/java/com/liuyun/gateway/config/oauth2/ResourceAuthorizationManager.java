@@ -13,7 +13,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.security.authorization.AuthorizationDecision;
 import org.springframework.security.authorization.ReactiveAuthorizationManager;
@@ -53,12 +52,6 @@ public class ResourceAuthorizationManager implements ReactiveAuthorizationManage
     public Mono<AuthorizationDecision> check(Mono<Authentication> mono, AuthorizationContext authorizationContext) {
         ServerHttpRequest request = authorizationContext.getExchange().getRequest();
         String url = request.getURI().getPath();
-
-
-        // OPTIONS 跨域的预检请求直接放行
-        if (request.getMethod() == HttpMethod.OPTIONS) {
-            return Mono.just(new AuthorizationDecision(true));
-        }
 
         // token为空拒绝访问
         String token = request.getHeaders().getFirst("Authorization");

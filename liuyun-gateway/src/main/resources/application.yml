@@ -29,24 +29,23 @@ spring:
     nacos:
       discovery:
         group: liuyun
-        server-addr: 123.57.73.216:8851
+        server-addr: 123.57.73.216:8848
         namespace: 30dd5d56-8bec-48eb-94dc-5851cc2e16cd
         service: ${spring.application.name}
         weight: 1
+    sentinel:
+      # filter:
+      #   enabled: false
+      enabled: true
+      log:
+        dir: ./logs/sentinel/${spring.application.name}
+      transport:
+        dashboard: 123.57.73.216:8852
     gateway:
       discovery:
         locator:
           enabled: true
           lower-case-service-id: true
-      globalcors:
-        cors-configurations:
-          '[/**]': #匹配所有请求
-            allowedOrigins: "*" #跨域处理 允许所有的域
-            allowedMethods: # 支持的方法
-              - GET
-              - POST
-              - PUT
-              - DELETE
       routes:
         - id: liuyun-user
           uri: lb://liuyun-user

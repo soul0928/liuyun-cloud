@@ -27,3 +27,4 @@ hs_err_pid*
 /*.iml
 /liuyun-auth/.mvn/
 /liuyun-common/liuyun-common.iml
+/logs/

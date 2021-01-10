@@ -1,5 +1,6 @@
 package com.liuyun.api.service.user;
 
+import com.liuyun.api.config.ApiFeignConfig;
 import com.liuyun.api.service.user.fallback.PermissionFeignServiceFallbackFactory;
 import com.liuyun.utils.result.Result;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -15,9 +16,9 @@ import java.util.Set;
  **/
 @FeignClient(value = "liuyun-user",
         path = "/sysPermission",
+        configuration = ApiFeignConfig.class,
         fallbackFactory = PermissionFeignServiceFallbackFactory.class,
-        contextId = "permissionFeignService",
-        decode404 = true)
+        contextId = "permissionFeignService")
 public interface PermissionFeignService {
 
     /**

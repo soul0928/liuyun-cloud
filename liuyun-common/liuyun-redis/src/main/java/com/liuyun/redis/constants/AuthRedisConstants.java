@@ -20,9 +20,14 @@ public class AuthRedisConstants extends AbstractRedisConstants {
     public final static String CLIENT_INFO_PREFIX = "client:info";
 
     /**
-     * 获取缓存 client 信息 前缀
+     * 获取缓存授权码信息 前缀
      */
     public final static String AUTHORIZATION_CODE_PREFIX = "authorization:code";
+
+    /**
+     * 获取缓存图片验证码信息 前缀
+     */
+    public final static String CAPTCHA_CODE_PREFIX = "captcha:code";
 
 
 

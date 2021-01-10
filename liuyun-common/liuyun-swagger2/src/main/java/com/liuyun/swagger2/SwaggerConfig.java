@@ -8,7 +8,10 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.annotation.Order;
 import springfox.bean.validators.configuration.BeanValidatorPluginsConfiguration;
-import springfox.documentation.builders.*;
+import springfox.documentation.builders.ApiInfoBuilder;
+import springfox.documentation.builders.PathSelectors;
+import springfox.documentation.builders.RequestHandlerSelectors;
+import springfox.documentation.builders.RequestParameterBuilder;
 import springfox.documentation.service.*;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.contexts.SecurityContext;
@@ -41,10 +44,10 @@ public class SwaggerConfig {
     }
 
 
-    @Bean(value = "userApi")
+    @Bean(value = "defaultApi")
     @Order(value = 1)
     public Docket groupRestApi() {
-        Docket docket = new Docket(DocumentationType.SWAGGER_2)
+        return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(createApiInfo(swaggerProperties))
                 .globalRequestParameters(buildGlobalOperationParameters(swaggerProperties))
                 .select()
@@ -53,7 +56,6 @@ public class SwaggerConfig {
                 .build()
                 .securitySchemes(securitySchemes())
                 .securityContexts(securityContexts());
-        return docket;
     }
 
     private List<RequestParameter> buildGlobalOperationParameters(SwaggerProperties swaggerProperties) {

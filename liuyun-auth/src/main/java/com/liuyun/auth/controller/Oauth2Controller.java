@@ -1,15 +1,21 @@
 package com.liuyun.auth.controller;
 
+import cn.hutool.captcha.ShearCaptcha;
+import cn.hutool.core.io.IoUtil;
 import com.liuyun.auth.config.constants.AuthConstants;
 import com.liuyun.auth.config.exception.AuthOauth2Exception;
 import com.liuyun.auth.service.AuthClientDetailsService;
 import com.liuyun.auth.service.AuthRedisCodeService;
 import com.liuyun.model.auth.vo.AuthLoginReqVO;
+import com.liuyun.redis.constants.AuthRedisConstants;
+import com.liuyun.redis.service.RedisService;
+import com.liuyun.utils.captcha.CaptchaUtils;
 import com.liuyun.utils.global.enums.GlobalResultEnum;
 import com.liuyun.utils.lang.StringUtils;
 import com.liuyun.utils.result.Result;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -27,12 +33,13 @@ import org.springframework.security.oauth2.provider.TokenRequest;
 import org.springframework.security.oauth2.provider.endpoint.TokenEndpoint;
 import org.springframework.security.oauth2.provider.token.AuthorizationServerTokenServices;
 import org.springframework.security.oauth2.provider.token.TokenStore;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.security.Principal;
 import java.util.Objects;
 import java.util.Set;
@@ -54,6 +61,8 @@ public class Oauth2Controller {
     private TokenEndpoint tokenEndpoint;
     @Resource
     private TokenStore tokenStore;
+    @Resource
+    private RedisService redisService;
     @Autowired
     private AuthenticationManager authenticationManager;
     @Autowired
@@ -62,6 +71,32 @@ public class Oauth2Controller {
     private AuthClientDetailsService authClientDetailsService;
     @Resource
     private AuthorizationServerTokenServices authorizationServerTokenServices;
+
+    /**
+     * 获取验证码
+     *
+     * @param uniqueCode {@link String} 唯一编码
+     * @param response {@link HttpServletResponse}
+     * @author wangdong
+     * @date 2021/1/10 7:26 下午
+     **/
+    @GetMapping(value = "/captcha/{uniqueCode}")
+    @ApiOperation(value = "获取验证码")
+    public void getCaptcha(@ApiParam(value = "唯一编码", required = true) @PathVariable("uniqueCode") String uniqueCode,
+                           HttpServletResponse response) {
+        ShearCaptcha captcha = CaptchaUtils.createShearCaptcha();
+        String cacheKey = AuthRedisConstants.getKey(AuthRedisConstants.AUTH_PREFIX, AuthRedisConstants.CAPTCHA_CODE_PREFIX, uniqueCode);
+        this.redisService.set(cacheKey, captcha.getCode());
+        ServletOutputStream out = null;
+        try {
+            out = response.getOutputStream();
+            captcha.write(out);
+        } catch (IOException e) {
+            log.error("响应验证码异常", e);
+        } finally {
+            IoUtil.close(out);
+        }
+    }
 
     /**
      * 重写 TokenEndpoint postAccessToken
@@ -82,11 +117,11 @@ public class Oauth2Controller {
         String clientId = getClientId(principal);
         ClientDetails clientDetails = authClientDetailsService.loadClientByClientId(clientId);
         Set<String> grantTypes = clientDetails.getAuthorizedGrantTypes();
-        if (!grantTypes.contains(vo.getGrantType())) {
+        if (!grantTypes.contains(vo.getGrant_type())) {
             return Result.fail(GlobalResultEnum.CLIENT_AUTHENTICATION_FAILED.getCode(), "该客户端暂不支持该认证类型");
         }
         OAuth2AccessToken auth2AccessToken = null;
-        switch (vo.getGrantType()) {
+        switch (vo.getGrant_type()) {
             case AuthConstants.AUTHORIZATION_CODE:
                 auth2AccessToken = authorizationCode(clientDetails, vo);
                 break;
@@ -116,7 +151,7 @@ public class Oauth2Controller {
      **/
     private OAuth2AccessToken authorizationCode(ClientDetails clientDetails, AuthLoginReqVO vo) {
         try {
-            TokenRequest tokenRequest = new TokenRequest(null, clientDetails.getClientId(), clientDetails.getScope(), vo.getGrantType());
+            TokenRequest tokenRequest = new TokenRequest(null, clientDetails.getClientId(), clientDetails.getScope(), vo.getGrant_type());
             OAuth2Request oAuth2Request = tokenRequest.createOAuth2Request(clientDetails);
             // 缓存的待处理信息
             OAuth2Authentication storedAuth = this.authRedisCodeService.consumeAuthorizationCode(vo.getCode());
@@ -150,7 +185,7 @@ public class Oauth2Controller {
      **/
     private OAuth2AccessToken clientCredentials(ClientDetails clientDetails, AuthLoginReqVO vo) {
         try {
-            TokenRequest tokenRequest = new TokenRequest(null, clientDetails.getClientId(), clientDetails.getScope(), vo.getGrantType());
+            TokenRequest tokenRequest = new TokenRequest(null, clientDetails.getClientId(), clientDetails.getScope(), vo.getGrant_type());
             OAuth2Request oAuth2Request = tokenRequest.createOAuth2Request(clientDetails);
             OAuth2Authentication oauth2Authentication = this.createOauth2Authentication(oAuth2Request, null);
             oauth2Authentication.setAuthenticated(true);
@@ -183,7 +218,7 @@ public class Oauth2Controller {
                 throw new AuthOauth2Exception(GlobalResultEnum.CLIENT_AUTHENTICATION_FAILED.getCode(), "客户端ID不匹配");
             }
             // 构建获取 Token 请求参数
-            TokenRequest tokenRequest = new TokenRequest(null, clientDetails.getClientId(), clientDetails.getScope(), vo.getGrantType());
+            TokenRequest tokenRequest = new TokenRequest(null, clientDetails.getClientId(), clientDetails.getScope(), vo.getGrant_type());
             return authorizationServerTokenServices.refreshAccessToken(vo.getRefreshToken(), tokenRequest);
         } catch (Exception e) {
             e.printStackTrace();
@@ -210,7 +245,7 @@ public class Oauth2Controller {
 
         try {
             UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(vo.getUsername(), vo.getPassword());
-            TokenRequest tokenRequest = new TokenRequest(null, clientDetails.getClientId(), clientDetails.getScope(), vo.getGrantType());
+            TokenRequest tokenRequest = new TokenRequest(null, clientDetails.getClientId(), clientDetails.getScope(), vo.getGrant_type());
             OAuth2Request oAuth2Request = tokenRequest.createOAuth2Request(clientDetails);
             Authentication authentication = authenticationManager.authenticate(usernamePasswordAuthenticationToken);
             // Session

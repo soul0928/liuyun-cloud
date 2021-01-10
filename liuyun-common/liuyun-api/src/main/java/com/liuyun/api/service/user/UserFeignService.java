@@ -1,5 +1,6 @@
 package com.liuyun.api.service.user;
 
+import com.liuyun.api.config.ApiFeignConfig;
 import com.liuyun.api.service.user.fallback.UserFeignServiceFallbackFactory;
 import com.liuyun.model.user.vo.SysUserInfoVO;
 import com.liuyun.utils.result.Result;
@@ -14,9 +15,9 @@ import org.springframework.web.bind.annotation.PathVariable;
  **/
 @FeignClient(value = "liuyun-user",
         path = "/sysUser",
+        configuration = ApiFeignConfig.class,
         fallbackFactory = UserFeignServiceFallbackFactory.class,
-        contextId = "userFeignService",
-        decode404 = true)
+        contextId = "userFeignService")
 public interface UserFeignService {
 
     /**

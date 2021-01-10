@@ -1,18 +1,15 @@
 package com.liuyun.api.config;
 
-import cn.hutool.extra.servlet.ServletUtil;
 import feign.RequestInterceptor;
 import feign.RequestTemplate;
-import feign.Retryer;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Primary;
+import org.springframework.util.Base64Utils;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
-import java.nio.charset.StandardCharsets;
+import java.util.Objects;
 
 /**
  * Feign请求拦截器
@@ -24,11 +21,9 @@ import java.nio.charset.StandardCharsets;
 @Slf4j
 public class ApiRequestInterceptor implements RequestInterceptor {
 
-    @Bean
-    @Primary
-    public Retryer retryer() {
-        return Retryer.NEVER_RETRY;
-    }
+    private static final String FEIGN_TOKEN_HEADER = "Feign_Authorization";
+
+    private static final String FEIGN_TOKEN = "liuyun:feign";
 
     /**
      * la拦截所有请求, 添加token数据
@@ -38,14 +33,10 @@ public class ApiRequestInterceptor implements RequestInterceptor {
      **/
     @Override
     public void apply(RequestTemplate requestTemplate) {
-        String authorization = null;
         HttpServletRequest request = getHttpServletRequest();
-
-        if (request != null) {
-            authorization = ServletUtil.getHeader(request, "Authorization", StandardCharsets.UTF_8);
-            requestTemplate.header("Authorization", authorization);
+        if (Objects.nonNull(request)) {
+            requestTemplate.header(FEIGN_TOKEN_HEADER, new String(Base64Utils.encode(FEIGN_TOKEN.getBytes())));
         }
-        log.info("Feign 请求拦截器获得 Authorization -> [{}];", authorization);
     }
 
     private HttpServletRequest getHttpServletRequest() {

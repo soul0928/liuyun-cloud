@@ -25,6 +25,7 @@ public class GatewaySecurityProperties {
     public static class GatewayIgnoreProperties {
 
         private static List<String> endpoint = Arrays.asList(
+                "/actuator/**",
                 "/auth/oauth/**",
                 "/doc.html",
                 "/favicon.ico",
