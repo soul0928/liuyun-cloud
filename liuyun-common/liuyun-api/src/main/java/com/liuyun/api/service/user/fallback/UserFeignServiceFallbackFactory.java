@@ -30,6 +30,12 @@ public class UserFeignServiceFallbackFactory implements FallbackFactory<UserFeig
                 log.error("根据用户账号获取用户信息 -> [{}]", username, throwable);
                 return Result.fail();
             }
+
+            @Override
+            public Result<SysUserInfoVO> queryUserByPhone(String phone) {
+                log.error("根据用户手机号码获取用户信息 -> [{}]", phone, throwable);
+                return Result.fail();
+            }
         };
 
     }

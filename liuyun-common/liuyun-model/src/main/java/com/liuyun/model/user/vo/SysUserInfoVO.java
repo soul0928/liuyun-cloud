@@ -1,5 +1,6 @@
 package com.liuyun.model.user.vo;
 
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
@@ -10,6 +11,7 @@ import lombok.Data;
  * @since 2020年12月7日 下午2:11:56
  */
 @Data
+@Api(tags = "用户信息")
 public class SysUserInfoVO {
 
     private static final long serialVersionUID = 1L;

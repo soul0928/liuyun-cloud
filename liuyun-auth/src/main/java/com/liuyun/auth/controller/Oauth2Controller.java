@@ -37,7 +37,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.security.Principal;
@@ -106,21 +105,20 @@ public class Oauth2Controller {
      *
      * @param principal Client {@link Principal} client 认证信息
      * @param vo        {@link AuthLoginReqVO} 认证请求参数
-     * @param request   {@link HttpServletRequest}
      * @return com.liuyun.utils.result.Result<org.springframework.security.oauth2.common.OAuth2AccessToken>
      * @author wangdong
      * @date 2021/1/6 3:41 下午
      **/
     @PostMapping(value = "/token")
     @ApiOperation(value = "获取token")
-    public Result<OAuth2AccessToken> login(Principal principal, AuthLoginReqVO vo, HttpServletRequest request) {
+    public Result<OAuth2AccessToken> login(Principal principal, AuthLoginReqVO vo) {
         String clientId = getClientId(principal);
         ClientDetails clientDetails = authClientDetailsService.loadClientByClientId(clientId);
         Set<String> grantTypes = clientDetails.getAuthorizedGrantTypes();
         if (!grantTypes.contains(vo.getGrant_type())) {
             return Result.fail(GlobalResultEnum.CLIENT_AUTHENTICATION_FAILED.getCode(), "该客户端暂不支持该认证类型");
         }
-        OAuth2AccessToken auth2AccessToken = null;
+        OAuth2AccessToken auth2AccessToken;
         switch (vo.getGrant_type()) {
             case AuthConstants.AUTHORIZATION_CODE:
                 auth2AccessToken = authorizationCode(clientDetails, vo);

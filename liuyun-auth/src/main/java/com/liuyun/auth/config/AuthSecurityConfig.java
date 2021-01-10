@@ -1,5 +1,6 @@
 package com.liuyun.auth.config;
 
+import com.liuyun.auth.config.mode.mobilepassword.MobilePasswordAuthenticationSecurityConfig;
 import com.liuyun.auth.config.properties.AuthSecurityProperties;
 import com.liuyun.auth.service.AuthUserDetailsService;
 import lombok.extern.slf4j.Slf4j;
@@ -29,6 +30,8 @@ public class AuthSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private AuthUserDetailsService authUserDetailsService;
+    @Autowired
+    private MobilePasswordAuthenticationSecurityConfig mobilePasswordAuthenticationSecurityConfig;
 
     /**
      * 装配BCryptPasswordEncoder用户密码的匹配
@@ -76,6 +79,8 @@ public class AuthSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/keypair/getPublicKey", "/v2/api-docs", "/actuator/**", "/oauth/captcha/**").permitAll()
                 .anyRequest().authenticated()
+                .and()
+                .apply(mobilePasswordAuthenticationSecurityConfig)
                 .and()
                 .csrf().disable();
     }

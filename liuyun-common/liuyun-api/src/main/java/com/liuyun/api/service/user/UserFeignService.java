@@ -41,4 +41,15 @@ public interface UserFeignService {
      **/
     @GetMapping("/queryUserByUsername/{username}")
     Result<SysUserInfoVO> queryUserByUsername(@PathVariable("username") String username);
+
+    /**
+     * 根据用户手机号码获取用户信息
+     *
+     * @param phone {@link String} 用户手机号码
+     * @return com.liuyun.core.result.Result<com.liuyun.model.user.vo.SysUserInfoVO>
+     * @author wangdong
+     * @date 2020/12/14 3:38 下午
+     **/
+    @GetMapping("/queryUserByPhone/{phone}")
+    Result<SysUserInfoVO> queryUserByPhone(@PathVariable("phone") String phone);
 }

@@ -3,6 +3,7 @@ package com.liuyun.user.controller;
 import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
 import com.liuyun.database.mybatisplus.controller.IBaseController;
+import com.liuyun.database.mybatisplus.enums.DelFlagEnum;
 import com.liuyun.model.user.entity.SysUserEntity;
 import com.liuyun.model.user.vo.SysUserInfoVO;
 import com.liuyun.user.service.SysUserService;
@@ -64,6 +65,29 @@ public class SysUserController extends IBaseController<SysUserEntity> {
     public Result<SysUserInfoVO> queryUserByUsername(@ApiParam(value = "用户账号", required = true) @PathVariable("username") String username) {
         SysUserEntity sysUserEntity = new LambdaQueryChainWrapper<>(this.sysUserService.getBaseMapper())
                 .eq(SysUserEntity::getUsername, username)
+                .eq(SysUserEntity::getDelFlag, DelFlagEnum.NOT_DELETED)
+                .one();
+        if (Objects.isNull(sysUserEntity)) {
+            return Result.fail("用户信息不存在!!!");
+        }
+        SysUserInfoVO sysUserInfoVO = BeanUtil.copyProperties(sysUserEntity, SysUserInfoVO.class);
+        return Result.success(sysUserInfoVO);
+    }
+
+    /**
+     * 根据用户手机号码获取用户信息
+     *
+     * @param phone {@link String} 用户手机号码
+     * @return com.liuyun.core.result.Result<com.liuyun.model.user.vo.SysUserInfoVO>
+     * @author wangdong
+     * @date 2020/12/14 3:38 下午
+     **/
+    @GetMapping("/queryUserByPhone/{phone}")
+    @ApiOperation(value = "根据用户 id 获取用户信息")
+    public Result<SysUserInfoVO> queryUserByPhone(@ApiParam(value = "手机号码", required = true) @PathVariable("phone") String phone) {
+        SysUserEntity sysUserEntity = new LambdaQueryChainWrapper<>(this.sysUserService.getBaseMapper())
+                .eq(SysUserEntity::getDelFlag, DelFlagEnum.NOT_DELETED)
+                .eq(SysUserEntity::getPhone, phone)
                 .one();
         if (Objects.isNull(sysUserEntity)) {
             return Result.fail("用户信息不存在!!!");

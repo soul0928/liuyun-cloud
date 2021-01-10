@@ -53,18 +53,18 @@ public class AuthUserDetailServiceImpl implements AuthUserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) {
         log.info("根据用户账号获取用户信息, 调用 Feign 接口 username -> [{}]", username);
-        Result<SysUserInfoVO> userResult = userFeignService.queryUserByUsername(username);
-        log.info("根据用户账号获取用户信息, 调用 Feign 接口响应参数为 -> [{}]", JSONUtil.toJsonStr(userResult));
-        if (!Objects.equals(GlobalResultEnum.SUCCESS.getCode(), userResult.getCode())) {
+        Result<SysUserInfoVO> usernameResult = userFeignService.queryUserByUsername(username);
+        log.info("根据用户账号获取用户信息, 调用 Feign 接口响应参数为 -> [{}]", JSONUtil.toJsonStr(usernameResult));
+        if (!Objects.equals(GlobalResultEnum.SUCCESS.getCode(), usernameResult.getCode())) {
             throw new AuthOauth2Exception(GlobalResultEnum.USER_NOT_EXIST);
         }
-        SysUserInfoVO userInfoVO = userResult.getResult();
+        SysUserInfoVO userInfoVO = usernameResult.getResult();
         if (Objects.isNull(userInfoVO)) {
             throw new AuthOauth2Exception(GlobalResultEnum.USER_NOT_EXIST);
         }
         checkUserStatus(userInfoVO);
         List<GrantedAuthority> grantedAuthorities = AuthorityUtils.NO_AUTHORITIES;
-        Set<String> roles = getRoles(userInfoVO);
+        Set<String> roles = getRoles(userInfoVO.getId());
         if (CollectionUtil.isNotEmpty(roles)) {
             grantedAuthorities = AuthorityUtils.createAuthorityList(roles.toArray(new String[0]));
         }
@@ -72,16 +72,45 @@ public class AuthUserDetailServiceImpl implements AuthUserDetailsService {
     }
 
     /**
+     * 根据手机号获取用户信息
+     *
+     * @param mobile {@link String} 手机号码
+     * @author wangdong
+     * @date 2021/1/10 8:30 下午
+     * @return org.springframework.security.core.userdetails.UserDetails
+     **/
+    @Override
+    public UserDetails loadUserByUserMobile(String mobile) {
+        log.info("根据手机号获取用户信息, 调用 Feign 接口 mobile -> [{}]", mobile);
+        Result<SysUserInfoVO> mobileResult = userFeignService.queryUserByUsername(mobile);
+        log.info("根据手机号获取用户信息, 调用 Feign 接口响应参数为 -> [{}]", JSONUtil.toJsonStr(mobileResult));
+        if (!Objects.equals(GlobalResultEnum.SUCCESS.getCode(), mobileResult.getCode())) {
+            throw new AuthOauth2Exception(GlobalResultEnum.USER_NOT_EXIST);
+        }
+        SysUserInfoVO userInfoVO = mobileResult.getResult();
+        if (Objects.isNull(userInfoVO)) {
+            throw new AuthOauth2Exception(GlobalResultEnum.USER_NOT_EXIST);
+        }
+        checkUserStatus(userInfoVO);
+        List<GrantedAuthority> grantedAuthorities = AuthorityUtils.NO_AUTHORITIES;
+        Set<String> roles = getRoles(userInfoVO.getId());
+        if (CollectionUtil.isNotEmpty(roles)) {
+            grantedAuthorities = AuthorityUtils.createAuthorityList(roles.toArray(new String[0]));
+        }
+        return new User(userInfoVO.getPhone(), passwordEncoder.encode(userInfoVO.getPassword()),  grantedAuthorities);
+    }
+
+    /**
      * 获取角色信息
      *
-     * @param userInfoVO {@link SysUserInfoVO}
+     * @param userId {@link Long} userId
      * @return java.util.Set<java.lang.String>
      * @author wangdong
      * @date 2020/12/28 12:07 上午
      **/
-    private Set<String> getRoles(SysUserInfoVO userInfoVO) {
-        log.info("根据 用户ID 获取用户角色信息, 调用 Feign 接口 userId -> [{}]", userInfoVO.getId());
-        Result<Set<String>> roleResult = roleFeignService.getRolesByUserId(userInfoVO.getId());
+    private Set<String> getRoles(Long userId) {
+        log.info("根据 用户ID 获取用户角色信息, 调用 Feign 接口 userId -> [{}]", userId);
+        Result<Set<String>> roleResult = roleFeignService.getRolesByUserId(userId);
         log.info("根据 用户ID 获取用户角色信息, 调用 Feign 接口响应参数为 -> [{}]", JSONUtil.toJsonStr(roleResult));
         if (!Objects.equals(GlobalResultEnum.SUCCESS.getCode(), roleResult.getCode())) {
             throw new InternalAuthenticationServiceException("用户信息不存在!!!");
