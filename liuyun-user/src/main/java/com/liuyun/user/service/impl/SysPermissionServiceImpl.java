@@ -1,7 +1,7 @@
 package com.liuyun.user.service.impl;
 
 import com.liuyun.database.mybatisplus.enums.DelFlagEnum;
-import com.liuyun.database.mybatisplus.service.impl.IBaseServiceImpl;
+import com.liuyun.database.mybatisplus.service.impl.AbstractServiceImpl;
 import com.liuyun.model.user.entity.SysPermissionEntity;
 import com.liuyun.model.user.entity.SysUserRoleEntity;
 import com.liuyun.user.mapper.SysPermissionMapper;
@@ -19,7 +19,7 @@ import java.util.Set;
  */
 @Service
 public class SysPermissionServiceImpl
-        extends IBaseServiceImpl<SysPermissionMapper, SysPermissionEntity> implements SysPermissionService {
+        extends AbstractServiceImpl<SysPermissionMapper, SysPermissionEntity> implements SysPermissionService {
 
     @Autowired
     private SysPermissionMapper sysPermissionMapper;

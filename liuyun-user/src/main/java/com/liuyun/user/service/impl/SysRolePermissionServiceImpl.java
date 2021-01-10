@@ -1,6 +1,6 @@
 package com.liuyun.user.service.impl;
 
-import com.liuyun.database.mybatisplus.service.impl.IBaseServiceImpl;
+import com.liuyun.database.mybatisplus.service.impl.AbstractServiceImpl;
 import com.liuyun.model.user.dto.AllRolePermissionDTO;
 import com.liuyun.model.user.entity.SysPermissionEntity;
 import com.liuyun.model.user.entity.SysRolePermissionEntity;
@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 public class SysRolePermissionServiceImpl
-        extends IBaseServiceImpl<SysRolePermissionMapper, SysRolePermissionEntity> implements SysRolePermissionService {
+        extends AbstractServiceImpl<SysRolePermissionMapper, SysRolePermissionEntity> implements SysRolePermissionService {
 
     @Autowired
     private RedisService redisService;

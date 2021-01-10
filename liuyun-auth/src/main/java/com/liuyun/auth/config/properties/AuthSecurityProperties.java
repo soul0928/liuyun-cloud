@@ -53,7 +53,7 @@ public class AuthSecurityProperties {
          */
         private String[] authorizationUrls = {};
 
-        public String[] GetAllUrls() {
+        public String[] getAllUrls() {
             List<String> list = new ArrayList<>();
             list.addAll(Arrays.asList(ENDPOINTS));
             list.addAll(Arrays.asList(authenticationUrls));

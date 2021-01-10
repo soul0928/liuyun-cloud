@@ -1,7 +1,7 @@
 package com.liuyun.model.user.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.liuyun.database.mybatisplus.entity.IBaseEntity;
+import com.liuyun.database.mybatisplus.entity.AbstractEntity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -21,7 +21,7 @@ import org.apache.ibatis.type.Alias;
 @Accessors(chain = true)
 @TableName("sys_user_role")
 @ApiModel(value="SysUserRoleEntity对象", description="用户角色关联表")
-public class SysUserRoleEntity extends IBaseEntity<SysUserRoleEntity> {
+public class SysUserRoleEntity extends AbstractEntity<SysUserRoleEntity> {
 
     private static final long serialVersionUID = 1L;
 

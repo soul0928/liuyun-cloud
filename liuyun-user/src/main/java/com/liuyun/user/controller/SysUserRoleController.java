@@ -1,6 +1,6 @@
 package com.liuyun.user.controller;
 
-import com.liuyun.database.mybatisplus.controller.IBaseController;
+import com.liuyun.database.mybatisplus.controller.AbstractController;
 import com.liuyun.model.user.entity.SysUserRoleEntity;
 import com.liuyun.user.service.SysUserRoleService;
 import io.swagger.annotations.Api;
@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/sysUserRole")
 @Api(tags = "用户角色关联表服务")
-public class SysUserRoleController extends IBaseController<SysUserRoleEntity> {
+public class SysUserRoleController extends AbstractController<SysUserRoleEntity> {
     @Autowired
     private SysUserRoleService sysUserRoleService;
 

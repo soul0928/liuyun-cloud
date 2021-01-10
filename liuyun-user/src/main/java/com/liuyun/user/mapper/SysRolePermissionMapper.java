@@ -1,6 +1,6 @@
 package com.liuyun.user.mapper;
 
-import com.liuyun.database.mybatisplus.mapper.IBaseMapper;
+import com.liuyun.database.mybatisplus.mapper.AbstractMapper;
 import com.liuyun.model.user.dto.AllRolePermissionDTO;
 import com.liuyun.model.user.entity.SysPermissionEntity;
 import com.liuyun.model.user.entity.SysRolePermissionEntity;
@@ -15,7 +15,7 @@ import java.util.List;
  * @since 2020-12-25 13:12:39
  */
 @Mapper
-public interface SysRolePermissionMapper extends IBaseMapper<SysRolePermissionEntity> {
+public interface SysRolePermissionMapper extends AbstractMapper<SysRolePermissionEntity> {
 
     /**
      * 查询所有角色关联权限信息

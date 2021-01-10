@@ -14,9 +14,13 @@ import org.springframework.data.redis.serializer.RedisSerializer;
  **/
 public class RedisObjectSerializer implements RedisSerializer<Object> {
 
-    // 做一个空数组，不是null
+    /**
+     * 做一个空数组，不是null
+     */
     private static final byte[] EMPTY_BYTE_ARRAY = new byte[0];
-    // 为了方便进行对象与字节数组的转换，所以应该首先准备出两个转换器
+    /**
+     * 为了方便进行对象与字节数组的转换，所以应该首先准备出两个转换器
+     */
     private Converter<Object, byte[]> serializingConverter = new SerializingConverter();
     private Converter<byte[], Object> deserializingConverter = new DeserializingConverter();
 

@@ -2,7 +2,7 @@ package com.liuyun.user.controller;
 
 import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
-import com.liuyun.database.mybatisplus.controller.IBaseController;
+import com.liuyun.database.mybatisplus.controller.AbstractController;
 import com.liuyun.database.mybatisplus.enums.DelFlagEnum;
 import com.liuyun.model.user.entity.SysUserEntity;
 import com.liuyun.model.user.vo.SysUserInfoVO;
@@ -28,7 +28,7 @@ import java.util.Objects;
 @RestController
 @RequestMapping("/sysUser")
 @Api(tags = "用户信息表服务")
-public class SysUserController extends IBaseController<SysUserEntity> {
+public class SysUserController extends AbstractController<SysUserEntity> {
 
     @Autowired
     private SysUserService sysUserService;

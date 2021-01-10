@@ -1,7 +1,7 @@
 package com.liuyun.model.auth.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.liuyun.database.mybatisplus.entity.IBaseEntity;
+import com.liuyun.database.mybatisplus.entity.AbstractEntity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -21,7 +21,7 @@ import org.apache.ibatis.type.Alias;
 @Accessors(chain = true)
 @TableName("oauth_client_details")
 @ApiModel(value="OauthClientDetailsEntity对象", description="")
-public class OauthClientDetailsEntity extends IBaseEntity<OauthClientDetailsEntity> {
+public class OauthClientDetailsEntity extends AbstractEntity<OauthClientDetailsEntity> {
 
     private static final long serialVersionUID = 1L;
 

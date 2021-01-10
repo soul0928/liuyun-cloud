@@ -1,7 +1,7 @@
 package com.liuyun.user.service.impl;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.liuyun.database.mybatisplus.service.impl.IBaseServiceImpl;
+import com.liuyun.database.mybatisplus.service.impl.AbstractServiceImpl;
 import com.liuyun.model.user.dto.SysUserPageDTO;
 import com.liuyun.model.user.entity.SysUserEntity;
 import com.liuyun.model.user.vo.SysUserPageVO;
@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class SysUserServiceImpl
-        extends IBaseServiceImpl<SysUserMapper, SysUserEntity> implements SysUserService {
+        extends AbstractServiceImpl<SysUserMapper, SysUserEntity> implements SysUserService {
 
     @Autowired
     private SysUserMapper sysUserMapper;

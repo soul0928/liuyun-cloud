@@ -1,6 +1,6 @@
 package com.liuyun.user.controller;
 
-import com.liuyun.database.mybatisplus.controller.IBaseController;
+import com.liuyun.database.mybatisplus.controller.AbstractController;
 import com.liuyun.model.user.entity.SysRoleEntity;
 import com.liuyun.user.service.SysRoleService;
 import com.liuyun.utils.result.Result;
@@ -26,7 +26,7 @@ import java.util.Set;
 @RestController
 @RequestMapping("/sysRole")
 @Api(tags = "基础角色表服务")
-public class SysRoleController extends IBaseController<SysRoleEntity> {
+public class SysRoleController extends AbstractController<SysRoleEntity> {
 
     @Autowired
     private SysRoleService sysRoleService;

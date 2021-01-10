@@ -33,7 +33,6 @@ import java.util.Objects;
 @Configuration
 @EnableSwagger2
 @Import(BeanValidatorPluginsConfiguration.class)
-// @ConditionalOnProperty(value = "liuyun.swagger.enable",havingValue = "true")
 public class SwaggerConfig {
 
     @Autowired

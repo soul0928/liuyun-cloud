@@ -75,12 +75,7 @@ public class GsonUtil {
     public static String toJson(Object obj) {
         String json = null;
         if (GSON != null) {
-
             json = GSON.toJson(obj);
-            /*if (StringUtils.isNoneBlank(json)) {
-                json = StringEscapeUtils.unescapeJavaScript(json);
-            }*/
-
         }
         return json;
     }

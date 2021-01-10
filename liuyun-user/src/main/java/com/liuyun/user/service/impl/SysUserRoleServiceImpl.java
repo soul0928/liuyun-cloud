@@ -1,6 +1,6 @@
 package com.liuyun.user.service.impl;
 
-import com.liuyun.database.mybatisplus.service.impl.IBaseServiceImpl;
+import com.liuyun.database.mybatisplus.service.impl.AbstractServiceImpl;
 import com.liuyun.model.user.entity.SysUserRoleEntity;
 import com.liuyun.user.mapper.SysUserRoleMapper;
 import com.liuyun.user.service.SysUserRoleService;
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class SysUserRoleServiceImpl
-        extends IBaseServiceImpl<SysUserRoleMapper, SysUserRoleEntity> implements SysUserRoleService {
+        extends AbstractServiceImpl<SysUserRoleMapper, SysUserRoleEntity> implements SysUserRoleService {
 
 
 }

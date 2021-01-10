@@ -5,7 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 /**
- *  IBasePageDTO
+ *  AbstractPageDTO
  *  分页实体
  * @author wangdong
  * @version 1.0.0
@@ -13,7 +13,7 @@ import lombok.Data;
  */
 @Data
 @ApiModel(value = "分页实体")
-public abstract class IBasePageDTO<T> {
+public abstract class AbstractPageDTO<T> {
 
     /**
      * 当前页码

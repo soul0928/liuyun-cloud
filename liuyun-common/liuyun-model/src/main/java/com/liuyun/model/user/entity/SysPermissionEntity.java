@@ -1,7 +1,7 @@
 package com.liuyun.model.user.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.liuyun.database.mybatisplus.entity.IBaseEntity;
+import com.liuyun.database.mybatisplus.entity.AbstractEntity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -21,7 +21,7 @@ import org.apache.ibatis.type.Alias;
 @Accessors(chain = true)
 @TableName("sys_permission")
 @ApiModel(value="SysPermissionEntity对象", description="基础权限表")
-public class SysPermissionEntity extends IBaseEntity<SysPermissionEntity> {
+public class SysPermissionEntity extends AbstractEntity<SysPermissionEntity> {
 
     private static final long serialVersionUID = 1L;
 

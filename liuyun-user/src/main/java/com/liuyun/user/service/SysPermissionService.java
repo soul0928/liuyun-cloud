@@ -1,6 +1,6 @@
 package com.liuyun.user.service;
 
-import com.liuyun.database.mybatisplus.service.IBaseService;
+import com.liuyun.database.mybatisplus.service.AbstractService;
 import com.liuyun.model.user.entity.SysPermissionEntity;
 
 import java.util.Set;
@@ -11,7 +11,7 @@ import java.util.Set;
  * @author WangDong
  * @since 2020-12-25 13:12:39
  */
-public interface SysPermissionService extends IBaseService<SysPermissionEntity> {
+public interface SysPermissionService extends AbstractService<SysPermissionEntity> {
 
 
     /**

@@ -1,6 +1,6 @@
 package com.liuyun.user.controller;
 
-import com.liuyun.database.mybatisplus.controller.IBaseController;
+import com.liuyun.database.mybatisplus.controller.AbstractController;
 import com.liuyun.model.user.entity.SysRolePermissionEntity;
 import com.liuyun.user.service.SysRolePermissionService;
 import com.liuyun.utils.result.Result;
@@ -24,7 +24,7 @@ import java.util.Set;
 @RestController
 @RequestMapping("/sysRolePermission")
 @Api(tags = "角色权限关联表服务")
-public class SysRolePermissionController extends IBaseController<SysRolePermissionEntity> {
+public class SysRolePermissionController extends AbstractController<SysRolePermissionEntity> {
 
     @Autowired
     private SysRolePermissionService sysRolePermissionService;

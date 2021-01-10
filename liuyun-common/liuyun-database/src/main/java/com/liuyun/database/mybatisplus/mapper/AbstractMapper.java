@@ -9,7 +9,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @version 1.0.0
  * @date 2020/7/21 00:01
  **/
-public interface IBaseMapper<T> extends BaseMapper<T> {
+public interface AbstractMapper<T> extends BaseMapper<T> {
 
 
 }

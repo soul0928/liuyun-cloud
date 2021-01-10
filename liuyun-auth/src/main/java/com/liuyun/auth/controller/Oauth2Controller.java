@@ -22,6 +22,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.common.DefaultOAuth2AccessToken;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.common.OAuth2RefreshToken;
@@ -115,11 +116,11 @@ public class Oauth2Controller {
         String clientId = getClientId(principal);
         ClientDetails clientDetails = authClientDetailsService.loadClientByClientId(clientId);
         Set<String> grantTypes = clientDetails.getAuthorizedGrantTypes();
-        if (!grantTypes.contains(vo.getGrant_type())) {
+        if (!grantTypes.contains(vo.getGrantType())) {
             return Result.fail(GlobalResultEnum.CLIENT_AUTHENTICATION_FAILED.getCode(), "该客户端暂不支持该认证类型");
         }
         OAuth2AccessToken auth2AccessToken;
-        switch (vo.getGrant_type()) {
+        switch (vo.getGrantType()) {
             case AuthConstants.AUTHORIZATION_CODE:
                 auth2AccessToken = authorizationCode(clientDetails, vo);
                 break;
@@ -149,7 +150,7 @@ public class Oauth2Controller {
      **/
     private OAuth2AccessToken authorizationCode(ClientDetails clientDetails, AuthLoginReqVO vo) {
         try {
-            TokenRequest tokenRequest = new TokenRequest(null, clientDetails.getClientId(), clientDetails.getScope(), vo.getGrant_type());
+            TokenRequest tokenRequest = new TokenRequest(null, clientDetails.getClientId(), clientDetails.getScope(), vo.getGrantType());
             OAuth2Request oAuth2Request = tokenRequest.createOAuth2Request(clientDetails);
             // 缓存的待处理信息
             OAuth2Authentication storedAuth = this.authRedisCodeService.consumeAuthorizationCode(vo.getCode());
@@ -183,7 +184,7 @@ public class Oauth2Controller {
      **/
     private OAuth2AccessToken clientCredentials(ClientDetails clientDetails, AuthLoginReqVO vo) {
         try {
-            TokenRequest tokenRequest = new TokenRequest(null, clientDetails.getClientId(), clientDetails.getScope(), vo.getGrant_type());
+            TokenRequest tokenRequest = new TokenRequest(null, clientDetails.getClientId(), clientDetails.getScope(), vo.getGrantType());
             OAuth2Request oAuth2Request = tokenRequest.createOAuth2Request(clientDetails);
             OAuth2Authentication oauth2Authentication = this.createOauth2Authentication(oAuth2Request, null);
             oauth2Authentication.setAuthenticated(true);
@@ -216,7 +217,7 @@ public class Oauth2Controller {
                 throw new AuthOauth2Exception(GlobalResultEnum.CLIENT_AUTHENTICATION_FAILED.getCode(), "客户端ID不匹配");
             }
             // 构建获取 Token 请求参数
-            TokenRequest tokenRequest = new TokenRequest(null, clientDetails.getClientId(), clientDetails.getScope(), vo.getGrant_type());
+            TokenRequest tokenRequest = new TokenRequest(null, clientDetails.getClientId(), clientDetails.getScope(), vo.getGrantType());
             return authorizationServerTokenServices.refreshAccessToken(vo.getRefreshToken(), tokenRequest);
         } catch (Exception e) {
             e.printStackTrace();
@@ -243,11 +244,11 @@ public class Oauth2Controller {
 
         try {
             UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(vo.getUsername(), vo.getPassword());
-            TokenRequest tokenRequest = new TokenRequest(null, clientDetails.getClientId(), clientDetails.getScope(), vo.getGrant_type());
+            TokenRequest tokenRequest = new TokenRequest(null, clientDetails.getClientId(), clientDetails.getScope(), vo.getGrantType());
             OAuth2Request oAuth2Request = tokenRequest.createOAuth2Request(clientDetails);
             Authentication authentication = authenticationManager.authenticate(usernamePasswordAuthenticationToken);
             // Session
-            // SecurityContextHolder.getContext().setAuthentication(authentication);
+            SecurityContextHolder.getContext().setAuthentication(authentication);
             OAuth2Authentication oAuth2Authentication = this.createOauth2Authentication(oAuth2Request, authentication);
             oAuth2Authentication.setAuthenticated(true);
             return authorizationServerTokenServices.createAccessToken(oAuth2Authentication);

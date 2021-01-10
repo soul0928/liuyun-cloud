@@ -9,7 +9,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @version 1.0.0
  * @date 2020/7/20 23:58
  **/
-public interface IBaseService<T> extends IService<T> {
+public interface AbstractService<T> extends IService<T> {
 
 
 }

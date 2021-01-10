@@ -1,7 +1,7 @@
 package com.liuyun.user.service.impl;
 
 import com.liuyun.database.mybatisplus.enums.DelFlagEnum;
-import com.liuyun.database.mybatisplus.service.impl.IBaseServiceImpl;
+import com.liuyun.database.mybatisplus.service.impl.AbstractServiceImpl;
 import com.liuyun.model.user.entity.SysRoleEntity;
 import com.liuyun.model.user.entity.SysUserRoleEntity;
 import com.liuyun.user.mapper.SysRoleMapper;
@@ -19,7 +19,7 @@ import java.util.Set;
  */
 @Service
 public class SysRoleServiceImpl
-        extends IBaseServiceImpl<SysRoleMapper, SysRoleEntity> implements SysRoleService {
+        extends AbstractServiceImpl<SysRoleMapper, SysRoleEntity> implements SysRoleService {
 
     @Autowired
     private SysRoleMapper sysRoleMapper;

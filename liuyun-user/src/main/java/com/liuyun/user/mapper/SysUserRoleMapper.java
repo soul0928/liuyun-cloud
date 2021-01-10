@@ -1,6 +1,6 @@
 package com.liuyun.user.mapper;
 
-import com.liuyun.database.mybatisplus.mapper.IBaseMapper;
+import com.liuyun.database.mybatisplus.mapper.AbstractMapper;
 import com.liuyun.model.user.entity.SysUserRoleEntity;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -11,6 +11,6 @@ import org.apache.ibatis.annotations.Mapper;
  * @since 2020-12-25 13:12:39
  */
 @Mapper
-public interface SysUserRoleMapper extends IBaseMapper<SysUserRoleEntity> {
+public interface SysUserRoleMapper extends AbstractMapper<SysUserRoleEntity> {
 
 }

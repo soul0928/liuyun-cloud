@@ -1,6 +1,6 @@
 package com.liuyun.model.user.dto;
 
-import com.liuyun.model.base.dto.IBasePageDTO;
+import com.liuyun.model.base.dto.AbstractPageDTO;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -13,7 +13,7 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class SysUserPageDTO extends IBasePageDTO<SysUserPageDTO> {
+public class SysUserPageDTO extends AbstractPageDTO<SysUserPageDTO> {
 
     private static final long serialVersionUID = 1L;
 

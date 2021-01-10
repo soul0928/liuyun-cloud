@@ -2,7 +2,7 @@ package com.liuyun.auth.service.impl;
 
 import com.liuyun.auth.mapper.OauthClientDetailsMapper;
 import com.liuyun.auth.service.OauthClientDetailsService;
-import com.liuyun.database.mybatisplus.service.impl.IBaseServiceImpl;
+import com.liuyun.database.mybatisplus.service.impl.AbstractServiceImpl;
 import com.liuyun.model.auth.entity.OauthClientDetailsEntity;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class OauthClientDetailsServiceImpl
-        extends IBaseServiceImpl<OauthClientDetailsMapper, OauthClientDetailsEntity> implements OauthClientDetailsService {
+        extends AbstractServiceImpl<OauthClientDetailsMapper, OauthClientDetailsEntity> implements OauthClientDetailsService {
 
 
 }
